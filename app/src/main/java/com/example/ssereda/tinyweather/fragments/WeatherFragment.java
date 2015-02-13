@@ -22,9 +22,6 @@ public class WeatherFragment extends Fragment {
         TextView textViewMiddleDayData = (TextView) view.findViewById(R.id.text_view_middle_day_data);
         TextView textViewRightDayData = (TextView) view.findViewById(R.id.text_view_right_day_data);
         textView.setTypeface(typeface);
-//        textViewLeftDayData.setTypeface(typeface);
-//        textViewMiddleDayData.setTypeface(typeface);
-//        textViewRightDayData.setTypeface(typeface);
 
         return view;
     }

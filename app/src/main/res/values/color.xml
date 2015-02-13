@@ -2,6 +2,9 @@
 <resources>
     <color name="drawer_item_color">#fff</color>
 
+    <!--global-->
+    <color name="text_color">#000000</color>
+
     <!--Material-->
     <color name="material_action_bar">#f27147</color>
     <color name="material_navigation_drawer_background">#f27147</color>
@@ -11,7 +14,6 @@
     <color name="repeat_shuffle_buttons_color">#f0f0f0</color>
     <color name="main_color">#ffffff</color>
     <color name="preference_layout_color">#f1f1f1</color>
-    <color name="player_color">#e5e5e5</color>
     <color name="material_toolbar_main_color">#ffffff</color>
 
     <!--fragment_city_add menu-->
@@ -25,5 +27,7 @@
     <color name="weather_fragment_bottom_left_background_color">#FFCC53</color>
     <color name="weather_fragment_bottom_middle_background_color">#FF9256</color>
     <color name="weather_fragment_bottom_right_background_color">#318994</color>
+
+    <color name="shape_background_color">#e5e5e5</color>
 
 </resources>

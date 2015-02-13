@@ -9,8 +9,11 @@
     <string name="action_weather_fragment">Weather</string>
 
     <!--add a new city-->
-    <string name="dialog.city.header">Please add a new city</string>
+    <string name="dialog.city.header">Please add a new city:</string>
 
     <!--EditText-->
     <string name="edit_text_enter_city_name">enter city name</string>
+
+    <!--toast-->
+    <string name="toast_exit">To exit the app please touch one more time</string>
 </resources>

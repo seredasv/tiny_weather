@@ -29,7 +29,6 @@ public class AddCityFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_city_add, null);
 
         TVcityHeader = (TextView) view.findViewById(R.id.tv_city_header);
-        TVcityPattern = (TextView) view.findViewById(R.id.tv_city_pattern);
         ETenterCity = (EditText) view.findViewById(R.id.et_enter_city);
         LVcityList = (ListView) view.findViewById(R.id.lv_city_list);
         LVcityList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

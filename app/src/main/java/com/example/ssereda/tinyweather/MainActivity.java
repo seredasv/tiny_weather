@@ -46,7 +46,7 @@ public class MainActivity extends ActionBarActivity {
     public static ListView drawerListView;
     public static Toolbar toolbar;
     private static long back_pressed;
-    int backStack = 2;
+    int backStack = 0;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private boolean closeDrawer = false;
     private int openFragment;
@@ -56,7 +56,7 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-        int count = getFragmentManager().getBackStackEntryCount();
+        int count = getSupportFragmentManager().getBackStackEntryCount();
 
         if (drawerLayout.isDrawerOpen(Gravity.START)) {
             drawerLayout.closeDrawer(Gravity.START);
@@ -68,11 +68,12 @@ public class MainActivity extends ActionBarActivity {
                     startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(startMain);
                 } else {
-                    Toast.makeText(getBaseContext(), "Для выхода коснитесь еще раз", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.toast_exit),
+                            Toast.LENGTH_SHORT).show();
                 }
                 back_pressed = System.currentTimeMillis();
             } else {
-                getFragmentManager().popBackStack();
+                getSupportFragmentManager().popBackStack();
             }
         }
     }
