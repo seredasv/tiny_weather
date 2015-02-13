@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import com.example.ssereda.tinyweather.adapters.NavigationDrawerAdapter;
 import com.example.ssereda.tinyweather.fragments.AddCityFragment;
-import com.example.ssereda.tinyweather.fragments.WeatherFragment;
 import com.example.ssereda.tinyweather.utils.DBHelper;
 import com.example.ssereda.tinyweather.utils.Utils;
 import com.survivingwithandroid.weather.lib.WeatherClient;
@@ -164,18 +163,6 @@ public class MainActivity extends ActionBarActivity {
                                 transaction.commit();
                             } else {
                                 transaction.replace(R.id.container, fragment, ADD_CITY_FRAGMENT);
-                                transaction.commit();
-                            }
-                            break;
-                        case R.id.action_weather_fragment:
-                            fragment = new WeatherFragment();
-                            transaction = getSupportFragmentManager().beginTransaction();
-                            transaction.addToBackStack(WEATHER_FRAGMENT);
-                            if (fragment.isAdded()) {
-                                transaction.show(fragment);
-                                transaction.commit();
-                            } else {
-                                transaction.replace(R.id.container, fragment, WEATHER_FRAGMENT);
                                 transaction.commit();
                             }
                             break;

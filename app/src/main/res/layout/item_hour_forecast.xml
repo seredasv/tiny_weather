@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50sp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tv_item_hour_forecast_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|left"
+        android:paddingLeft="20sp"
+        android:text="time"
+        android:layout_weight="1"
+        android:textColor="@color/text_color_black" />
+
+    <ImageView
+        android:id="@+id/image_view_hour_forecast_clouds"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@drawable/image_view_umbrella"/>
+
+    <TextView
+        android:id="@+id/tv_item_hour_forecast_temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:paddingRight="20sp"
+        android:paddingLeft="20sp"
+        android:text="temperature"
+        android:layout_weight="0"
+        android:textColor="@color/text_color_black" />
+
+    <TextView
+        android:id="@+id/tv_item_hour_forecast_wind"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:paddingRight="20sp"
+        android:text="wind"
+        android:layout_weight="0"
+        android:textColor="@color/text_color_black" />
+</LinearLayout>
