@@ -13,6 +13,7 @@
         android:gravity="center">
 
         <ImageView
+            android:id="@+id/image_view_current_weather"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/image_view_mostly_clouds" />
@@ -39,10 +40,10 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/text_view_current_day_data"
                     android:layout_width="match_parent"
                     android:layout_height="50sp"
                     android:gravity="center_vertical"
-                    android:text="Четверг 20h"
                     android:textColor="@color/weather_fragment_text_color" />
 
                 <LinearLayout
@@ -65,9 +66,9 @@
                             android:background="@drawable/image_view_pin" />
 
                         <TextView
+                            android:id="@+id/text_view_place_name"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="Одесса, Украина"
                             android:textColor="@color/weather_fragment_text_color" />
                     </LinearLayout>
 
@@ -88,9 +89,9 @@
                             android:background="@drawable/image_view_navigation" />
 
                         <TextView
+                            android:id="@+id/text_view_wind"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="7.5m/s"
                             android:textColor="@color/weather_fragment_text_color" />
                     </LinearLayout>
 
@@ -114,9 +115,9 @@
                                 android:background="@drawable/image_view_temperature" />
 
                             <TextView
+                                android:id="@+id/text_view_temperature"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="2*"
                                 android:textColor="@color/weather_fragment_text_color" />
                         </LinearLayout>
 
@@ -133,9 +134,9 @@
                                 android:background="@drawable/image_view_umbrella" />
 
                             <TextView
+                                android:id="@+id/text_view_humidity"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="0.0mm"
                                 android:textColor="@color/weather_fragment_text_color" />
                         </LinearLayout>
                     </LinearLayout>
@@ -149,11 +150,10 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:id="@+id/text_view_today_temperature"
+                    android:id="@+id/text_view_current_temperature"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="-4*"
                     android:textAppearance="@style/TextAppearance.FontPath"
                     android:textColor="@color/weather_fragment_text_color"
                     android:textSize="@dimen/weather_fragment_middle_right_text_size" />
@@ -175,19 +175,18 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/text_view_left_day_data"
+                    android:id="@+id/text_view_day_data_1"
                     android:layout_width="match_parent"
                     android:layout_height="50sp"
                     android:gravity="center"
                     android:textSize="18sp"
-                    android:text="Пятница"
                     android:textColor="@color/weather_fragment_text_color" />
 
                 <TextView
+                    android:id="@+id/text_view_temperature_1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="-1*"
                     android:textColor="@color/weather_fragment_text_color"
                     android:textSize="50sp" />
             </LinearLayout>
@@ -200,19 +199,18 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/text_view_middle_day_data"
+                    android:id="@+id/text_view_day_data_2"
                     android:layout_width="match_parent"
                     android:layout_height="50sp"
                     android:gravity="center"
                     android:textSize="18sp"
-                    android:text="Суббота"
                     android:textColor="@color/weather_fragment_text_color" />
 
                 <TextView
+                    android:id="@+id/text_view_temperature_2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="8*"
                     android:textColor="@color/weather_fragment_text_color"
                     android:textSize="50sp" />
             </LinearLayout>
@@ -225,19 +223,18 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/text_view_right_day_data"
+                    android:id="@+id/text_view_day_data_3"
                     android:layout_width="match_parent"
                     android:layout_height="50sp"
                     android:gravity="center"
                     android:textSize="18sp"
-                    android:text="Воскресенье"
                     android:textColor="@color/weather_fragment_text_color" />
 
                 <TextView
+                    android:id="@+id/text_view_temperature_3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="-3*"
                     android:textColor="@color/weather_fragment_text_color"
                     android:textSize="50sp" />
             </LinearLayout>

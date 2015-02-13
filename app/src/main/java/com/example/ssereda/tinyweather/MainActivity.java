@@ -2,6 +2,7 @@ package com.example.ssereda.tinyweather;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,7 +26,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.ssereda.tinyweather.adapters.NavigationDrawerAdapter;
-import com.example.ssereda.tinyweather.data.DrawerItem;
 import com.example.ssereda.tinyweather.fragments.AddCityFragment;
 import com.example.ssereda.tinyweather.fragments.WeatherFragment;
 import com.example.ssereda.tinyweather.utils.DBHelper;
@@ -38,8 +38,6 @@ import com.survivingwithandroid.weather.lib.provider.openweathermap.Openweatherm
 import com.survivingwithandroid.weather.lib.request.WeatherRequest;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
     public static final String WEATHER_FRAGMENT = "weather_fragment";
@@ -58,6 +56,7 @@ public class MainActivity extends ActionBarActivity {
     private FrameLayout frameLayout;
     private float lastTranslate = 0.0f;
     public static WeatherClient weatherClient;
+    private Cursor cursor;
 
     @Override
     public void onBackPressed() {
@@ -208,14 +207,7 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        List<DrawerItem> dataList = new ArrayList<>();
-
-        dataList.add(new DrawerItem("Мои аудиозаписи", R.drawable.ic_launcher));
-        dataList.add(new DrawerItem("Сохраненные", R.drawable.ic_launcher));
-        dataList.add(new DrawerItem("Мои друзья", R.drawable.ic_launcher));
-
-        adapter = new NavigationDrawerAdapter(this, R.layout.drawer_list_item, dataList);
-        drawerListView.setAdapter(adapter);
+        createNavigationDrawerAdapter();
 
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
                 R.string.app_name, R.string.app_name) {
@@ -410,5 +402,27 @@ public class MainActivity extends ActionBarActivity {
             closeDrawer = true;
             drawerLayout.closeDrawer(Gravity.START);
         }
+    }
+
+    private void createNavigationDrawerAdapter() {
+        if (db != null) {
+            String[] columns = new String[]{DBHelper.ID, DBHelper.PLACES_ID, DBHelper.PLACES_COUNTRY,
+                    DBHelper.PLACES_REGION, DBHelper.PLACES_NAME};
+            cursor = MainActivity.db.query(DBHelper.TABLE_PLACES, columns, null, null, null, null, null);
+        }
+
+        String[] from = new String[]{
+                DBHelper.PLACES_NAME
+        };
+        int[] to = new int[]{
+                R.id.label
+        };
+
+        if (adapter != null) {
+            adapter = null;
+        }
+        adapter = new NavigationDrawerAdapter(this, R.layout.drawer_list_item, cursor, from, to, 0);
+        drawerListView.setAdapter(adapter);
+        adapter.changeCursor(cursor);
     }
 }

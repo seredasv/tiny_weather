@@ -17,7 +17,6 @@ import com.survivingwithandroid.weather.lib.model.City;
 import com.survivingwithandroid.weather.lib.model.CurrentWeather;
 import com.survivingwithandroid.weather.lib.model.WeatherForecast;
 import com.survivingwithandroid.weather.lib.model.WeatherHourForecast;
-import com.survivingwithandroid.weather.lib.request.WeatherRequest;
 
 import java.util.List;
 
@@ -38,14 +37,16 @@ public class Utils {
         return ((netInfo != null) && netInfo.isConnected());
     }
 
-    public static void searchCityByLocation(final Context context, final ListView listView, Criteria criteria) {
+    public static void searchCityByLocation(final Context context, final ListView listView, final Criteria criteria) {
         try {
             MainActivity.weatherClient.searchCityByLocation(WeatherClient.createDefaultCriteria(), new WeatherClient.CityEventListener() {
                 //            MainActivity.weatherClient.searchCityByLocation(criteria, new WeatherClient.CityEventListener() {
                 @Override
                 public void onCityListRetrieved(List<City> cities) {
-                    CityAdapter cityAdapter = new CityAdapter(context, R.layout.item_city_list, cities);
-                    listView.setAdapter(cityAdapter);
+                    if (criteria != null) {
+                        CityAdapter cityAdapter = new CityAdapter(context, R.layout.item_city_list, cities);
+                        listView.setAdapter(cityAdapter);
+                    }
                 }
 
                 @Override
@@ -91,41 +92,6 @@ public class Utils {
 //        condDescr.setText(weather.currentCondition.getCondition() + "(" + weather.currentCondition.getDescr() + ")");
 //        temp.setText("" + ((int) weather.temperature.getTemp()));
 //        unitTemp.setText(weather.getUnit().tempUnit);
-    }
-
-    public static void getCurrentCondition(String cityID) {
-        MainActivity.weatherClient.getCurrentCondition(new WeatherRequest(cityID), new WeatherClient.WeatherEventListener() {
-            @Override
-            public void onWeatherRetrieved(CurrentWeather currentWeather) {
-                float currentTemp = currentWeather.weather.temperature.getTemp();
-                Log.e("mylog", "descr: " + currentWeather.weather.currentCondition.getDescr());
-                Log.e("mylog", "temp: " + String.format("%.0f", currentWeather.weather.temperature.getTemp()));
-                Log.e("mylog", "press: " + String.valueOf(currentWeather.weather.currentCondition.getPressure()));
-                Log.e("mylog", "wind: " + String.valueOf(currentWeather.weather.wind.getSpeed()));
-                Log.e("mylog", "humidity: " + String.valueOf(currentWeather.weather.currentCondition.getHumidity()));
-                Log.e("mylog", "condition: " + String.valueOf(currentWeather.weather.currentCondition.getCondition()));
-                Log.e("mylog", "feels like: " + String.valueOf(currentWeather.weather.currentCondition.getFeelsLike()));
-                Log.e("mylog", "press trend: " + String.valueOf(currentWeather.weather.currentCondition.getPressureTrend()));
-                Log.e("mylog", "visibility: " + String.valueOf(currentWeather.weather.currentCondition.getVisibility()));
-                Log.e("mylog", "weather code: " + String.valueOf(currentWeather.weather.currentCondition.getWeatherCode()));
-                Log.e("mylog", "weather id: " + String.valueOf(currentWeather.weather.currentCondition.getWeatherId()));
-
-//                weatherIcon.setImageResource(WeatherIconMapper.getWeatherResource(currentWeather.weather.currentCondition.getIcon(), currentWeather.weather.currentCondition.getWeatherId()));
-//
-//                setToolbarColor(currentWeather.weather.temperature.getTemp());
-            }
-
-            @Override
-            public void onWeatherError(WeatherLibException weatherLibException) {
-                Log.e("mylog", "weather lib exception");
-                Log.e("mylog", String.valueOf(weatherLibException));
-            }
-
-            @Override
-            public void onConnectionError(Throwable t) {
-                Log.e("mylog", "connection error");
-            }
-        });
     }
 
     public static void getHourForecastWeather(String cityID) {
