@@ -213,6 +213,15 @@ public class MainActivity extends ActionBarActivity {
                     frameLayout.startAnimation(anim);
                     lastTranslate = moveFactor;
                 }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                    toolbar.setTranslationX(moveFactor);
+                } else {
+                    TranslateAnimation anim = new TranslateAnimation(lastTranslate, moveFactor, 0.0f, 0.0f);
+                    anim.setDuration(0);
+                    anim.setFillAfter(true);
+                    toolbar.startAnimation(anim);
+                    lastTranslate = moveFactor;
+                }
             }
 
             public void onDrawerOpened(View drawerView) {
