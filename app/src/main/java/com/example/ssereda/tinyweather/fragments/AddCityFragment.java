@@ -20,7 +20,7 @@ import com.example.ssereda.tinyweather.utils.Utils;
 import com.survivingwithandroid.weather.lib.model.City;
 
 public class AddCityFragment extends Fragment {
-    TextView TVcityHeader, TVcityPattern;
+    TextView TVcityHeader;
     EditText ETenterCity;
     ListView LVcityList;
 

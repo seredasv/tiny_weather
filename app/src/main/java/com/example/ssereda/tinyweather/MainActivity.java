@@ -2,6 +2,7 @@ package com.example.ssereda.tinyweather;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,6 +28,7 @@ import com.example.ssereda.tinyweather.adapters.NavigationDrawerAdapter;
 import com.example.ssereda.tinyweather.data.DrawerItem;
 import com.example.ssereda.tinyweather.fragments.AddCityFragment;
 import com.example.ssereda.tinyweather.fragments.WeatherFragment;
+import com.example.ssereda.tinyweather.utils.DBHelper;
 import com.survivingwithandroid.weather.lib.WeatherClient;
 import com.survivingwithandroid.weather.lib.WeatherConfig;
 import com.survivingwithandroid.weather.lib.client.okhttp.WeatherDefaultClient;
@@ -46,6 +48,8 @@ public class MainActivity extends ActionBarActivity {
     public static DrawerLayout drawerLayout;
     public static ListView drawerListView;
     public static Toolbar toolbar;
+    public static DBHelper dbHelper;
+    public static SQLiteDatabase db;
     private static long back_pressed;
     int backStack = 0;
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -54,7 +58,6 @@ public class MainActivity extends ActionBarActivity {
     private FrameLayout frameLayout;
     private float lastTranslate = 0.0f;
     public static WeatherClient weatherClient;
-    private LinearLayout linearLayoutAddANewCity;
 
     @Override
     public void onBackPressed() {
@@ -85,6 +88,12 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
+//        deleteDatabase(DBHelper.DATABASE_NAME);
+        if (dbHelper == null) {
+            dbHelper = new DBHelper(this);
+        }
+        db = dbHelper.getWritableDatabase();
 
         //instantiate builder
 //        WeatherClient.ClientBuilder builder = new WeatherClient.ClientBuilder();
@@ -181,7 +190,7 @@ public class MainActivity extends ActionBarActivity {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerListView = (ListView) findViewById(R.id.left_drawer);
         frameLayout = (FrameLayout) findViewById(R.id.container);
-        linearLayoutAddANewCity = (LinearLayout) findViewById(R.id.ll_add_a_new_city);
+        LinearLayout linearLayoutAddANewCity = (LinearLayout) findViewById(R.id.ll_add_a_new_city);
         linearLayoutAddANewCity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
