@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="drawer_item_color">#fff</color>
+
+    <!--Material-->
+    <color name="material_action_bar">#f27147</color>
+    <color name="material_navigation_drawer_background">#f27147</color>
+    <color name="material_navigation_drawer_background_pressed">#6293e8</color>
+    <color name="button_background">#5d8bdd</color>
+    <color name="progress_bar_color">#ee8100</color>
+    <color name="repeat_shuffle_buttons_color">#f0f0f0</color>
+    <color name="main_color">#ffffff</color>
+    <color name="preference_layout_color">#f1f1f1</color>
+    <color name="player_color">#e5e5e5</color>
+    <color name="material_toolbar_main_color">#ffffff</color>
+
+    <!--fragment_city_add menu-->
+    <color name="main_menu_background_color">#fff</color>
+    <color name="main_menu_text_color">#000000</color>
+
+    <!--weather fragment-->
+    <color name="weather_fragment_text_color">#fff</color>
+    <color name="weather_fragment_up_background_color">#fff</color>
+    <color name="weather_fragment_middle_background_color">#FF776D</color>
+    <color name="weather_fragment_bottom_left_background_color">#FFCC53</color>
+    <color name="weather_fragment_bottom_middle_background_color">#FF9256</color>
+    <color name="weather_fragment_bottom_right_background_color">#318994</color>
+
+</resources>

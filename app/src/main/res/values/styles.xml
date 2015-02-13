@@ -1,8 +1,26 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <!--<item name="android:activatedBackgroundIndicator">@drawable/list_view_activated_background</item>-->
+        <!--remove fade when dialog window opens-->
+        <item name="android:backgroundDimEnabled">false</item>
+
+        <item name="colorPrimary">@color/material_toolbar_main_color</item>
+        <item name="colorPrimaryDark">@color/material_toolbar_main_color</item>
+        <item name="colorAccent">@color/material_toolbar_main_color</item>
+        <item name="android:windowBackground">@color/material_toolbar_main_color</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
+    <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light" >
+        <item name="android:background">@color/main_menu_background_color</item>
+        <item name="android:textColor">@color/main_menu_text_color</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextAppearance.FontPath" parent="android:TextAppearance">
+        <item name="fontPath">fonts/Roboto-Thin.ttf</item>
     </style>
 
 </resources>

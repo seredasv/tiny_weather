@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">Tiny Weather</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
 
+    <!--menu-->
+    <string name="action_settings">Settings</string>
+    <string name="action_add_city">Add City</string>
+    <string name="action_weather_fragment">Weather</string>
+
+    <!--add a new city-->
+    <string name="dialog.city.header">Please add a new city</string>
+
+    <!--EditText-->
+    <string name="edit_text_enter_city_name">enter city name</string>
 </resources>

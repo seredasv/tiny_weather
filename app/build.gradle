@@ -22,4 +22,10 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:21.0.3'
+    //WeatherLib
+    compile 'com.survivingwithandroid:weatherlib:1.5.3'
+    compile 'com.survivingwithandroid:weatherlib_okhttpclient:1.5.3'
+    compile 'com.squareup.okhttp:okhttp:2.2.0'
+    // change font
+    compile 'uk.co.chrisjenx:calligraphy:2.0.1'
 }
