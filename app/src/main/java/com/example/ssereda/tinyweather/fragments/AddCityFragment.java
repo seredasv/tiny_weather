@@ -1,6 +1,7 @@
 package com.example.ssereda.tinyweather.fragments;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.location.Criteria;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +22,15 @@ import android.widget.TextView;
 
 import com.example.ssereda.tinyweather.MainActivity;
 import com.example.ssereda.tinyweather.R;
-import com.example.ssereda.tinyweather.adapters.NavigationDrawerAdapter;
+import com.example.ssereda.tinyweather.adapters.CityAdapter;
 import com.example.ssereda.tinyweather.utils.DBHelper;
 import com.example.ssereda.tinyweather.utils.Utils;
+import com.survivingwithandroid.weather.lib.WeatherClient;
+import com.survivingwithandroid.weather.lib.exception.LocationProviderNotFoundException;
+import com.survivingwithandroid.weather.lib.exception.WeatherLibException;
 import com.survivingwithandroid.weather.lib.model.City;
+
+import java.util.List;
 
 public class AddCityFragment extends Fragment {
     TextView TVcityHeader;
@@ -66,7 +73,7 @@ public class AddCityFragment extends Fragment {
                     MainActivity.db.insert(DBHelper.TABLE_PLACES, null, contentValues);
                 }
 
-                createNavigationDrawerAdapter();
+                Utils.createNavigationDrawerAdapter(getActivity());
             }
         });
 
@@ -78,7 +85,7 @@ public class AddCityFragment extends Fragment {
                 criteria.setCostAllowed(false);
             }
 
-            Utils.searchCityByLocation(getActivity(), LVcityList, criteria);
+            searchCityByLocation(getActivity(), LVcityList, criteria);
         }
 
         linearLayoutTrackingOnOff.setOnClickListener(new View.OnClickListener() {
@@ -89,7 +96,7 @@ public class AddCityFragment extends Fragment {
 
                     isTracking = false;
 
-                    Utils.searchCityByLocation(getActivity(), LVcityList, null);
+                    searchCityByLocation(getActivity(), LVcityList, null);
                 } else {
                     imageViewTrackingOnOff.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.image_view_pin_on));
 
@@ -103,7 +110,7 @@ public class AddCityFragment extends Fragment {
                         criteria.setCostAllowed(false);
                     }
 
-                    Utils.searchCityByLocation(getActivity(), LVcityList, criteria);
+                    searchCityByLocation(getActivity(), LVcityList, criteria);
                 }
             }
         });
@@ -116,7 +123,7 @@ public class AddCityFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
                 if (count > 3) {
-                    Utils.searchCity(charSequence, getActivity(), LVcityList);
+                    searchCity(charSequence, getActivity(), LVcityList);
                 }
             }
 
@@ -128,25 +135,52 @@ public class AddCityFragment extends Fragment {
         return view;
     }
 
-    private void createNavigationDrawerAdapter() {
-        if (MainActivity.db != null && MainActivity.db.isOpen()) {
-            String[] columns = new String[]{DBHelper.ID, DBHelper.PLACES_ID, DBHelper.PLACES_COUNTRY,
-                    DBHelper.PLACES_REGION, DBHelper.PLACES_NAME};
-            cursor = MainActivity.db.query(DBHelper.TABLE_PLACES, columns, null, null, null, null, null);
-        }
+    public static void searchCityByLocation(final Context context, final ListView listView, final Criteria criteria) {
+        try {
+            MainActivity.weatherClient.searchCityByLocation(WeatherClient.createDefaultCriteria(), new WeatherClient.CityEventListener() {
+                //            MainActivity.weatherClient.searchCityByLocation(criteria, new WeatherClient.CityEventListener() {
+                @Override
+                public void onCityListRetrieved(List<City> cities) {
+                    if (criteria != null) {
+                        CityAdapter cityAdapter = new CityAdapter(context, R.layout.item_city_list, cities);
+                        listView.setAdapter(cityAdapter);
+                    }
+                }
 
-        String[] from = new String[]{
-                DBHelper.PLACES_NAME
-        };
-        int[] to = new int[]{
-                R.id.label
-        };
+                @Override
+                public void onWeatherError(WeatherLibException wle) {
+                    Log.e("mylog", "weather lib exception");
+                }
 
-        if (MainActivity.adapter != null) {
-            MainActivity.adapter = null;
+                @Override
+                public void onConnectionError(Throwable t) {
+                    Log.e("mylog", "on connection error");
+                }
+            });
+        } catch (LocationProviderNotFoundException e) {
+            Log.e("mylog", String.valueOf(e));
         }
-        MainActivity.adapter = new NavigationDrawerAdapter(getActivity(), R.layout.drawer_list_item, cursor, from, to, 0);
-        MainActivity.drawerListView.setAdapter(MainActivity.adapter);
-        MainActivity.adapter.changeCursor(cursor);
+    }
+
+    public static void searchCity(CharSequence charSequence, final Context context, final ListView listView) {
+        if (MainActivity.weatherClient != null) {
+            MainActivity.weatherClient.searchCity(charSequence.toString(), new WeatherClient.CityEventListener() {
+                @Override
+                public void onCityListRetrieved(List<City> cities) {
+                    CityAdapter cityAdapter = new CityAdapter(context, R.layout.item_city_list, cities);
+                    listView.setAdapter(cityAdapter);
+                }
+
+                @Override
+                public void onWeatherError(WeatherLibException e) {
+                    Log.e("mylog", "weather error");
+                }
+
+                @Override
+                public void onConnectionError(Throwable throwable) {
+                    Log.e("mylog", "connection error");
+                }
+            });
+        }
     }
 }

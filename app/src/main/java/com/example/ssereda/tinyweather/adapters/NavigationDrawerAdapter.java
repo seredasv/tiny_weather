@@ -15,6 +15,7 @@ import com.example.ssereda.tinyweather.MainActivity;
 import com.example.ssereda.tinyweather.R;
 import com.example.ssereda.tinyweather.fragments.WeatherFragment;
 import com.example.ssereda.tinyweather.utils.DBHelper;
+import com.example.ssereda.tinyweather.utils.Utils;
 
 
 public class NavigationDrawerAdapter extends SimpleCursorAdapter {
@@ -31,7 +32,7 @@ public class NavigationDrawerAdapter extends SimpleCursorAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = super.getView(position, convertView, parent);
-        LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.itemLayout);
+        LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.linear_layout_item_layout);
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,6 +68,19 @@ public class NavigationDrawerAdapter extends SimpleCursorAdapter {
 
                 if (MainActivity.drawerLayout != null) {
                     MainActivity.drawerLayout.closeDrawer(Gravity.START);
+                }
+            }
+        });
+        LinearLayout linearLayoutDeletePlace = (LinearLayout) view.findViewById(R.id.linear_layout_delete_place);
+        linearLayoutDeletePlace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (cursor.moveToPosition(position)) {
+                    String id = cursor.getString(cursor.getColumnIndex(DBHelper.ID));
+                    MainActivity.db.delete(DBHelper.TABLE_PLACES, DBHelper.ID + " = ?",
+                            new String[]{id});
+
+                    Utils.createNavigationDrawerAdapter(context);
                 }
             }
         });

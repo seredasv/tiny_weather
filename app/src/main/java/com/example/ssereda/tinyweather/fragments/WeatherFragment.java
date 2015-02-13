@@ -60,26 +60,28 @@ public class WeatherFragment extends Fragment {
         TextView textViewTemperature_2 = (TextView) view.findViewById(R.id.text_view_temperature_2);
         TextView textViewTemperature_3 = (TextView) view.findViewById(R.id.text_view_temperature_3);
 
+        MainActivity.toolbar.setTitle(placesName);
+
         if (placesID != null && placesID.length() > 0) {
             getCurrentCondition(placesID);
         }
 
         calendar = Calendar.getInstance();
-        String currentDayOfWeek = String.valueOf(getWeekDay(changeFirstDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK) - 1)));
+        String currentDayOfWeek = String.valueOf(getWeekDayName(changeFirstDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK) - 1)));
         String currentHour = String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
         String currentMinute = String.valueOf(calendar.get(Calendar.MINUTE));
         textViewCurrentDayData.setText(currentDayOfWeek + "  " + currentHour + ":" + currentMinute);
 
         calendar.add(Calendar.DAY_OF_WEEK, 1);
-        String dayOfWeek_1 = String.valueOf(getWeekDay(changeFirstDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK) - 1)));
+        String dayOfWeek_1 = String.valueOf(getWeekDayName(changeFirstDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK) - 1)));
         textViewDayData_1.setText(dayOfWeek_1);
 
         calendar.add(Calendar.DAY_OF_WEEK, 1);
-        String dayOfWeek_2 = String.valueOf(getWeekDay(changeFirstDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK) - 1)));
+        String dayOfWeek_2 = String.valueOf(getWeekDayName(changeFirstDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK) - 1)));
         textViewDayData_2.setText(dayOfWeek_2);
 
         calendar.add(Calendar.DAY_OF_WEEK, 1);
-        String dayOfWeek_3 = String.valueOf(getWeekDay(changeFirstDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK) - 1)));
+        String dayOfWeek_3 = String.valueOf(getWeekDayName(changeFirstDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK) - 1)));
         textViewDayData_3.setText(dayOfWeek_3);
 
         if (placesName != null && placesName.length() > 0) {
@@ -93,26 +95,14 @@ public class WeatherFragment extends Fragment {
         MainActivity.weatherClient.getCurrentCondition(new WeatherRequest(cityID), new WeatherClient.WeatherEventListener() {
             @Override
             public void onWeatherRetrieved(CurrentWeather currentWeather) {
-                float currentTemperature = currentWeather.weather.temperature.getTemp();
-                float currentHumidity = currentWeather.weather.currentCondition.getHumidity();
-                float currentWindSpeed = currentWeather.weather.wind.getSpeed();
+                int currentTemperature = (int) currentWeather.weather.temperature.getTemp();
+                int currentHumidity = (int) currentWeather.weather.currentCondition.getHumidity();
+                int currentWindSpeed = (int) currentWeather.weather.wind.getSpeed();
 
                 textViewWind.setText(String.valueOf(currentWindSpeed) + " m/s");
-                textViewTemperature.setText(String.valueOf(currentTemperature));
-                textViewCurrentTemperature.setText(String.valueOf(currentTemperature));
+                textViewTemperature.setText(String.valueOf(currentTemperature) + "\u00b0");
+                textViewCurrentTemperature.setText(String.valueOf(currentTemperature) + "\u00b0");
                 textViewHumidity.setText(String.valueOf(currentHumidity) + " mm");
-
-                Log.e("mylog", "descr: " + currentWeather.weather.currentCondition.getDescr());
-                Log.e("mylog", "temp: " + String.format("%.0f", currentWeather.weather.temperature.getTemp()));
-                Log.e("mylog", "press: " + String.valueOf(currentWeather.weather.currentCondition.getPressure()));
-                Log.e("mylog", "wind: " + String.valueOf(currentWeather.weather.wind.getSpeed()));
-                Log.e("mylog", "humidity: " + String.valueOf(currentWeather.weather.currentCondition.getHumidity()));
-                Log.e("mylog", "condition: " + String.valueOf(currentWeather.weather.currentCondition.getCondition()));
-                Log.e("mylog", "feels like: " + String.valueOf(currentWeather.weather.currentCondition.getFeelsLike()));
-                Log.e("mylog", "press trend: " + String.valueOf(currentWeather.weather.currentCondition.getPressureTrend()));
-                Log.e("mylog", "visibility: " + String.valueOf(currentWeather.weather.currentCondition.getVisibility()));
-                Log.e("mylog", "weather code: " + String.valueOf(currentWeather.weather.currentCondition.getWeatherCode()));
-                Log.e("mylog", "weather id: " + String.valueOf(currentWeather.weather.currentCondition.getWeatherId()));
 
 //                weatherIcon.setImageResource(WeatherIconMapper.getWeatherResource(currentWeather.weather.currentCondition.getIcon(), currentWeather.weather.currentCondition.getWeatherId()));
 //
@@ -132,7 +122,7 @@ public class WeatherFragment extends Fragment {
         });
     }
 
-    public String getWeekDay(int weekDay) {
+    public String getWeekDayName(int weekDay) {
         switch (weekDay) {
             case 1:
                 return "Monday";

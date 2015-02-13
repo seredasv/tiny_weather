@@ -29,6 +29,7 @@ import com.example.ssereda.tinyweather.adapters.NavigationDrawerAdapter;
 import com.example.ssereda.tinyweather.fragments.AddCityFragment;
 import com.example.ssereda.tinyweather.fragments.WeatherFragment;
 import com.example.ssereda.tinyweather.utils.DBHelper;
+import com.example.ssereda.tinyweather.utils.Utils;
 import com.survivingwithandroid.weather.lib.WeatherClient;
 import com.survivingwithandroid.weather.lib.WeatherConfig;
 import com.survivingwithandroid.weather.lib.client.okhttp.WeatherDefaultClient;
@@ -207,7 +208,7 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        createNavigationDrawerAdapter();
+        Utils.createNavigationDrawerAdapter(this);
 
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
                 R.string.app_name, R.string.app_name) {
@@ -325,7 +326,7 @@ public class MainActivity extends ActionBarActivity {
         drawerListView.setItemChecked(position, true);
         drawerListView.setSelection(position);
 //            setTitle(drawerNames[position]);
-        drawerLayout.closeDrawer(drawerListView);
+        drawerLayout.closeDrawer(Gravity.START);
     }
 
     @Override
@@ -402,27 +403,5 @@ public class MainActivity extends ActionBarActivity {
             closeDrawer = true;
             drawerLayout.closeDrawer(Gravity.START);
         }
-    }
-
-    private void createNavigationDrawerAdapter() {
-        if (db != null) {
-            String[] columns = new String[]{DBHelper.ID, DBHelper.PLACES_ID, DBHelper.PLACES_COUNTRY,
-                    DBHelper.PLACES_REGION, DBHelper.PLACES_NAME};
-            cursor = MainActivity.db.query(DBHelper.TABLE_PLACES, columns, null, null, null, null, null);
-        }
-
-        String[] from = new String[]{
-                DBHelper.PLACES_NAME
-        };
-        int[] to = new int[]{
-                R.id.label
-        };
-
-        if (adapter != null) {
-            adapter = null;
-        }
-        adapter = new NavigationDrawerAdapter(this, R.layout.drawer_list_item, cursor, from, to, 0);
-        drawerListView.setAdapter(adapter);
-        adapter.changeCursor(cursor);
     }
 }
