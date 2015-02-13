@@ -52,7 +52,7 @@
             android:background="@color/drawer_item_color" />
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/left_drawer_view"
         android:layout_width="250sp"
         android:layout_height="match_parent"
@@ -71,5 +71,22 @@
             android:listSelector="@drawable/list_selector"
             android:paddingTop="15sp"
             android:showDividers="middle" />
-    </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_add_a_new_city"
+            android:layout_width="match_parent"
+            android:layout_height="60sp"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:background="@color/weather_fragment_middle_background_color">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/add_city"
+                android:textColor="@color/text_color_white"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:gravity="center"/>
+            </LinearLayout>
+    </RelativeLayout>
 </android.support.v4.widget.DrawerLayout>

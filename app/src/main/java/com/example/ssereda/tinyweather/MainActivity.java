@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.ViewDragHelper;
 import android.support.v7.app.ActionBarActivity;
@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -53,6 +54,7 @@ public class MainActivity extends ActionBarActivity {
     private FrameLayout frameLayout;
     private float lastTranslate = 0.0f;
     public static WeatherClient weatherClient;
+    private LinearLayout linearLayoutAddANewCity;
 
     @Override
     public void onBackPressed() {
@@ -157,7 +159,7 @@ public class MainActivity extends ActionBarActivity {
                             }
                             break;
                         case R.id.action_weather_fragment:
-                        fragment = new WeatherFragment();
+                            fragment = new WeatherFragment();
                             transaction = getSupportFragmentManager().beginTransaction();
                             transaction.addToBackStack(WEATHER_FRAGMENT);
                             if (fragment.isAdded()) {
@@ -179,6 +181,23 @@ public class MainActivity extends ActionBarActivity {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerListView = (ListView) findViewById(R.id.left_drawer);
         frameLayout = (FrameLayout) findViewById(R.id.container);
+        linearLayoutAddANewCity = (LinearLayout) findViewById(R.id.ll_add_a_new_city);
+        linearLayoutAddANewCity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new AddCityFragment();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.addToBackStack(ADD_CITY_FRAGMENT);
+                if (fragment.isAdded()) {
+                    transaction.show(fragment);
+                    transaction.commit();
+                } else {
+                    transaction.replace(R.id.container, fragment, ADD_CITY_FRAGMENT);
+                    transaction.commit();
+                }
+                drawerLayout.closeDrawer(Gravity.START);
+            }
+        });
 
         List<DrawerItem> dataList = new ArrayList<>();
 

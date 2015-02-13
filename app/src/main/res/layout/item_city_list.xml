@@ -10,7 +10,7 @@
         android:id="@+id/tv_item_city_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textColor="@color/text_color"
+        android:textColor="@color/text_color_black"
         android:gravity="center_vertical"
         android:text="text"/>
 </LinearLayout>

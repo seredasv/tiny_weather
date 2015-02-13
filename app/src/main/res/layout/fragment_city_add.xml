@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20sp"
             android:layout_marginTop="15sp"
-            android:text="@string/dialog.city.header"
+            android:text="@string/add_city_header"
             android:textStyle="bold" />
 
         <EditText
@@ -28,7 +28,7 @@
             android:layout_marginRight="15sp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8sp"
-            android:textColor="@color/text_color"
+            android:textColor="@color/text_color_black"
             android:hint="@string/edit_text_enter_city_name"
             android:inputType="text" />
 
