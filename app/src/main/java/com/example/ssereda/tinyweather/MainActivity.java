@@ -1,6 +1,7 @@
 package com.example.ssereda.tinyweather;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,13 +14,11 @@ import android.support.v4.widget.ViewDragHelper;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.TranslateAnimation;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -27,15 +26,13 @@ import android.widget.Toast;
 
 import com.example.ssereda.tinyweather.adapters.NavigationDrawerAdapter;
 import com.example.ssereda.tinyweather.fragments.AddCityFragment;
+import com.example.ssereda.tinyweather.fragments.WeatherFragment;
 import com.example.ssereda.tinyweather.utils.DBHelper;
 import com.example.ssereda.tinyweather.utils.Utils;
 import com.survivingwithandroid.weather.lib.WeatherClient;
 import com.survivingwithandroid.weather.lib.WeatherConfig;
 import com.survivingwithandroid.weather.lib.client.okhttp.WeatherDefaultClient;
-import com.survivingwithandroid.weather.lib.exception.WeatherLibException;
-import com.survivingwithandroid.weather.lib.model.CurrentWeather;
 import com.survivingwithandroid.weather.lib.provider.openweathermap.OpenweathermapProviderType;
-import com.survivingwithandroid.weather.lib.request.WeatherRequest;
 
 import java.lang.reflect.Field;
 
@@ -57,6 +54,7 @@ public class MainActivity extends ActionBarActivity {
     private float lastTranslate = 0.0f;
     public static WeatherClient weatherClient;
     private Cursor cursor;
+    public static SharedPreferences sharedPreferences;
 
     @Override
     public void onBackPressed() {
@@ -88,11 +86,13 @@ public class MainActivity extends ActionBarActivity {
 
         setContentView(R.layout.activity_main);
 
-//        deleteDatabase(DBHelper.DATABASE_NAME);
+        //        deleteDatabase(DBHelper.DATABASE_NAME);
         if (dbHelper == null) {
             dbHelper = new DBHelper(this);
         }
         db = dbHelper.getWritableDatabase();
+
+        sharedPreferences = getSharedPreferences("last_place_id", MODE_PRIVATE);
 
         //instantiate builder
 //        WeatherClient.ClientBuilder builder = new WeatherClient.ClientBuilder();
@@ -120,33 +120,12 @@ public class MainActivity extends ActionBarActivity {
                     .build();
 
 //            weatherClient.updateWeatherConfig(config);
-
-            weatherClient.getCurrentCondition(new WeatherRequest("2988507"), new WeatherClient.WeatherEventListener() {
-                @Override
-                public void onWeatherRetrieved(CurrentWeather currentWeather) {
-                    float currentTemp = currentWeather.weather.temperature.getTemp();
-                    Log.e("mylog", "City [" + currentWeather.weather.location.getCity() + "] Current temp [" + currentTemp + "]");
-                }
-
-                @Override
-                public void onWeatherError(WeatherLibException e) {
-                    Log.e("mylog", "Weather Error - parsing data");
-                    e.printStackTrace();
-                }
-
-                @Override
-                public void onConnectionError(Throwable throwable) {
-                    Log.e("mylog", "Connection error");
-                    throwable.printStackTrace();
-                }
-            });
         } catch (Throwable t) {
             t.printStackTrace();
         }
 
         toolbar = (Toolbar) findViewById(R.id.material_toolbar);
         if (toolbar != null) {
-            toolbar.setNavigationIcon(R.drawable.ic_launcher);
             setSupportActionBar(toolbar);
             toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                 @Override
@@ -200,10 +179,6 @@ public class MainActivity extends ActionBarActivity {
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
                 R.string.app_name, R.string.app_name) {
             public void onDrawerClosed(View view) {
-                if (closeDrawer) {
-                    displayView(openFragment);
-                }
-                closeDrawer = false;
             }
 
             @Override
@@ -237,8 +212,6 @@ public class MainActivity extends ActionBarActivity {
         };
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
-
-        drawerListView.setOnItemClickListener(new DrawerItemClickListener());
 
         // change touch area to open drawer:
         Field mDragger = null;
@@ -288,34 +261,6 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    private void displayView(int position) {
-        Fragment fragment = null;
-        FragmentTransaction transaction;
-
-        switch (position) {
-            case 0:
-//                    fragment = new HomeFragment();
-//                    transaction = getFragmentManager().beginTransaction();
-//                    transaction.addToBackStack(MY_AUDIO_FRAGMENT);
-//                    if (fragment.isAdded()) {
-//                        transaction.show(fragment);
-//                        transaction.commit();
-//                    } else {
-//                        transaction.replace(R.id.container, fragment, MY_AUDIO_FRAGMENT);
-//                        transaction.commit();
-//                    }
-//                break;
-            default:
-                break;
-        }
-
-        // update selected item and title, then close the drawer
-        drawerListView.setItemChecked(position, true);
-        drawerListView.setSelection(position);
-//            setTitle(drawerNames[position]);
-        drawerLayout.closeDrawer(Gravity.START);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -337,12 +282,6 @@ public class MainActivity extends ActionBarActivity {
     }
 
     @Override
-    public void setTitle(CharSequence title) {
-//        drawerTitle = title;
-//        getActionBar().setTitle(drawerTitle);
-    }
-
-    @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         actionBarDrawerToggle.syncState();
@@ -355,40 +294,56 @@ public class MainActivity extends ActionBarActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
+
+        String lastPlaceID = sharedPreferences.getString(DBHelper.ID, "");
+        if (lastPlaceID != null && lastPlaceID.length() > 0) {
+            String[] columns = new String[]{DBHelper.ID , DBHelper.PLACES_COUNTRY,
+                    DBHelper.PLACES_REGION, DBHelper.PLACES_ID, DBHelper.PLACES_NAME };
+            if (db != null && db.isOpen()) {
+                Cursor cursor = db.query(DBHelper.TABLE_PLACES, columns, DBHelper.ID + " = ? ",
+                        new String[]{lastPlaceID}, null, null, null);
+                if (cursor != null) {
+                    if (cursor.moveToFirst()) {
+                        Fragment fragment = new WeatherFragment();
+
+                        toolbar.setTitle(cursor.getString(cursor.getColumnIndex(DBHelper.PLACES_NAME)));
+
+                        Bundle bundle = new Bundle();
+                        bundle.putInt(DBHelper.ID, cursor.getInt(cursor.getColumnIndex(DBHelper.ID)));
+                        bundle.putString(DBHelper.PLACES_ID, cursor.getString(cursor.getColumnIndex(DBHelper.PLACES_ID)));
+                        bundle.putString(DBHelper.PLACES_COUNTRY, cursor.getString(cursor.getColumnIndex(DBHelper.PLACES_COUNTRY)));
+                        bundle.putString(DBHelper.PLACES_REGION, cursor.getString(cursor.getColumnIndex(DBHelper.PLACES_REGION)));
+                        bundle.putString(DBHelper.PLACES_NAME, cursor.getString(cursor.getColumnIndex(DBHelper.PLACES_NAME)));
+                        fragment.setArguments(bundle);
+
+                        if (MainActivity.sharedPreferences != null) {
+                            SharedPreferences.Editor editor = MainActivity.sharedPreferences.edit();
+                            editor.putString(DBHelper.ID, cursor.getString(cursor.getColumnIndex(DBHelper.ID)));
+                            editor.apply();
+                        }
+
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.addToBackStack(WEATHER_FRAGMENT);
+                        if (fragment.isAdded()) {
+                            transaction.show(fragment);
+                            transaction.commit();
+                        } else {
+                            transaction.replace(R.id.container, fragment, WEATHER_FRAGMENT);
+                            transaction.commit();
+                        }
+                    }
+                }
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    }
-
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            openFragment = position;
-            closeDrawer = true;
-            drawerLayout.closeDrawer(Gravity.START);
-        }
     }
 }

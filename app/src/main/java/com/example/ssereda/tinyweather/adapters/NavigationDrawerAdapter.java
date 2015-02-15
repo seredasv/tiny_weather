@@ -1,6 +1,7 @@
 package com.example.ssereda.tinyweather.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -50,10 +51,11 @@ public class NavigationDrawerAdapter extends SimpleCursorAdapter {
                     bundle.putString(DBHelper.PLACES_NAME, cursor.getString(cursor.getColumnIndex(DBHelper.PLACES_NAME)));
                     fragment.setArguments(bundle);
 
-//                    if (MainActivity.sharedPreferences != null) {
-//                        SharedPreferences.Editor editor = MainActivity.sharedPreferences.edit();
-//                        editor.putString(DBHelper.ID, cursor.getString(wardrobeID));
-//                        editor.apply();
+                    if (MainActivity.sharedPreferences != null) {
+                        SharedPreferences.Editor editor = MainActivity.sharedPreferences.edit();
+                        editor.putString(DBHelper.ID, cursor.getString(cursor.getColumnIndex(DBHelper.ID)));
+                        editor.apply();
+                    }
                 }
 
                 FragmentTransaction transaction = ((MainActivity) context).getSupportFragmentManager().beginTransaction();

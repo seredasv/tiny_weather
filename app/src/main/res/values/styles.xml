@@ -3,8 +3,6 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <!--<item name="android:activatedBackgroundIndicator">@drawable/list_view_activated_background</item>-->
-        <!--remove fade when dialog window opens-->
-        <item name="android:backgroundDimEnabled">false</item>
 
         <item name="colorPrimary">@color/material_toolbar_main_color</item>
         <item name="colorPrimaryDark">@color/material_toolbar_main_color</item>
@@ -13,7 +11,7 @@
         <item name="windowActionBar">false</item>
     </style>
 
-    <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light" >
+    <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Dark" >
         <item name="android:background">@color/main_menu_background_color</item>
         <item name="android:textColor">@color/main_menu_text_color</item>
         <item name="android:textSize">18sp</item>

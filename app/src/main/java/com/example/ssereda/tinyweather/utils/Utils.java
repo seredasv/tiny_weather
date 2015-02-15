@@ -11,7 +11,6 @@ import com.example.ssereda.tinyweather.R;
 import com.example.ssereda.tinyweather.adapters.NavigationDrawerAdapter;
 import com.survivingwithandroid.weather.lib.WeatherClient;
 import com.survivingwithandroid.weather.lib.exception.WeatherLibException;
-import com.survivingwithandroid.weather.lib.model.CurrentWeather;
 import com.survivingwithandroid.weather.lib.model.WeatherForecast;
 import com.survivingwithandroid.weather.lib.model.WeatherHourForecast;
 
@@ -30,14 +29,6 @@ public class Utils {
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
         return ((netInfo != null) && netInfo.isConnected());
-    }
-
-    protected static void updateView(Object obj) {
-        CurrentWeather weather = (CurrentWeather) obj;
-//        cityText.setText(weather.location.getCity() + "," + weather.location.getCountry());
-//        condDescr.setText(weather.currentCondition.getCondition() + "(" + weather.currentCondition.getDescr() + ")");
-//        temp.setText("" + ((int) weather.temperature.getTemp()));
-//        unitTemp.setText(weather.getUnit().tempUnit);
     }
 
     public static void createNavigationDrawerAdapter(Context context) {
@@ -69,8 +60,18 @@ public class Utils {
         MainActivity.weatherClient.getHourForecastWeather(cityID, new WeatherClient.HourForecastWeatherEventListener() {
                     @Override
                     public void onWeatherRetrieved(WeatherHourForecast weatherHourForecast) {
-                        updateView(weatherHourForecast);
-//                        weatherHourForecast.getHourForecast().get(0).weather.temperature;
+                        Log.e("mylog", "temp: " + String.valueOf(weatherHourForecast.getHourForecast().get(0).weather.temperature.getTemp()));
+                        Log.e("mylog", "time: " + String.valueOf(weatherHourForecast.getHourForecast().get(0).timestamp));
+                        Log.e("mylog", "clouds: " + String.valueOf(weatherHourForecast.getHourForecast().get(0).weather.clouds.getPerc()));
+//                        Log.e("mylog", "icon: " + String.valueOf(weatherHourForecast.getHourForecast().get(0).weather.iconData.toString()));
+                        Log.e("mylog", "rain: " + String.valueOf(weatherHourForecast.getHourForecast().get(0).weather.rain.toString()));
+                        Log.e("mylog", "snow1: " + String.valueOf(weatherHourForecast.getHourForecast().get(0).weather.snow.getAmmount()));
+                        Log.e("mylog", "snow2: " + String.valueOf(weatherHourForecast.getHourForecast().get(0).weather.snow.getTime()));
+                        Log.e("mylog", "wind1: " + String.valueOf(weatherHourForecast.getHourForecast().get(0).weather.wind.getChill()));
+                        Log.e("mylog", "wind2: " + String.valueOf(weatherHourForecast.getHourForecast().get(0).weather.wind.getDeg()));
+                        Log.e("mylog", "wind3: " + String.valueOf(weatherHourForecast.getHourForecast().get(0).weather.wind.getGust()));
+                        Log.e("mylog", "wind4: " + String.valueOf(weatherHourForecast.getHourForecast().get(0).weather.wind.getSpeed()));
+
 //                        weatherHourForecast.getHourForecast().get(0).timestamp;
 //                        weatherHourForecast.getHourForecast().get(0).weather.clouds;
 //                        weatherHourForecast.getHourForecast().get(0).weather.iconData;
@@ -96,7 +97,6 @@ public class Utils {
         MainActivity.weatherClient.getForecastWeather(cityID, new WeatherClient.ForecastWeatherEventListener() {
             @Override
             public void onWeatherRetrieved(WeatherForecast weatherForecast) {
-                updateView(weatherForecast);
             }
 
             @Override

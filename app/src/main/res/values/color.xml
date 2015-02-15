@@ -15,7 +15,7 @@
     <color name="repeat_shuffle_buttons_color">#f0f0f0</color>
     <color name="main_color">#ffffff</color>
     <color name="preference_layout_color">#f1f1f1</color>
-    <color name="material_toolbar_main_color">#ffffff</color>
+    <color name="material_toolbar_main_color">#47a4f2</color>
 
     <!--fragment_city_add menu-->
     <color name="main_menu_background_color">#fff</color>
@@ -30,5 +30,6 @@
     <color name="weather_fragment_bottom_right_background_color">#318994</color>
 
     <color name="shape_background_color">#e5e5e5</color>
+    <color name="background_add_city_color">#ff776d</color>
 
 </resources>

@@ -4,20 +4,50 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_weight="1"
-        android:background="@color/weather_fragment_up_background_color"
-        android:gravity="center">
+        android:background="@color/weather_fragment_up_background_color">
 
-        <ImageView
-            android:id="@+id/image_view_current_weather"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/image_view_mostly_clouds" />
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/image_view_current_weather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60sp"
+            android:layout_marginBottom="20sp"
+            android:layout_marginRight="20sp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/image_view_update_weather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:layout_gravity="right"
+                android:layout_marginBottom="10sp"
+                android:background="@drawable/update_weather" />
+
+            <TextView
+                android:id="@+id/text_view_weather_update_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:textColor="@color/text_color_black" />
+        </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="20sp"
-                android:layout_weight="1"
+                android:layout_weight="4"
                 android:orientation="vertical">
 
                 <TextView
@@ -102,24 +132,24 @@
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="5">
+                        <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:layout_weight="5">-->
 
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical|left"
-                                android:layout_marginRight="15sp"
-                                android:background="@drawable/image_view_temperature" />
+                        <!--<ImageView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_gravity="center_vertical|left"-->
+                        <!--android:layout_marginRight="15sp"-->
+                        <!--android:background="@drawable/image_view_temperature" />-->
 
-                            <TextView
-                                android:id="@+id/text_view_temperature"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:textColor="@color/weather_fragment_text_color" />
-                        </LinearLayout>
+                        <!--<TextView-->
+                        <!--android:id="@+id/text_view_temperature"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:textColor="@color/weather_fragment_text_color" />-->
+                        <!--</LinearLayout>-->
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -147,7 +177,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_weight="3">
 
                 <TextView
                     android:id="@+id/text_view_current_temperature"
@@ -179,8 +209,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="50sp"
                     android:gravity="center"
-                    android:textSize="18sp"
-                    android:textColor="@color/weather_fragment_text_color" />
+                    android:textColor="@color/weather_fragment_text_color"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/text_view_temperature_1"
@@ -203,8 +233,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="50sp"
                     android:gravity="center"
-                    android:textSize="18sp"
-                    android:textColor="@color/weather_fragment_text_color" />
+                    android:textColor="@color/weather_fragment_text_color"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/text_view_temperature_2"
@@ -227,8 +257,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="50sp"
                     android:gravity="center"
-                    android:textSize="18sp"
-                    android:textColor="@color/weather_fragment_text_color" />
+                    android:textColor="@color/weather_fragment_text_color"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/text_view_temperature_3"

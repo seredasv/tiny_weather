@@ -20,7 +20,7 @@
             app:contentInsetLeft="0dp"
             app:contentInsetStart="0dp"
             app:popupTheme="@style/ActionBarPopupThemeOverlay"
-            app:theme="@style/AppTheme">
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -65,8 +65,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:choiceMode="singleChoice"
-            android:divider="@null"
-            android:dividerHeight="0dp"
+            android:dividerHeight="1sp"
+            android:divider="@color/shape_background_color"
             android:listSelector="@drawable/list_selector"
             android:paddingTop="15sp"
             android:showDividers="middle" />
@@ -77,7 +77,7 @@
             android:layout_height="60sp"
             android:layout_alignParentBottom="true"
             android:gravity="center"
-            android:background="@color/weather_fragment_middle_background_color">
+            android:background="@color/background_add_city_color">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

@@ -8,11 +8,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ssereda.tinyweather.MainActivity;
 import com.example.ssereda.tinyweather.R;
 import com.example.ssereda.tinyweather.utils.DBHelper;
+import com.example.ssereda.tinyweather.utils.Utils;
+import com.example.ssereda.tinyweather.utils.WeatherIconMapper;
 import com.survivingwithandroid.weather.lib.WeatherClient;
 import com.survivingwithandroid.weather.lib.exception.WeatherLibException;
 import com.survivingwithandroid.weather.lib.model.CurrentWeather;
@@ -23,8 +26,11 @@ import java.util.Calendar;
 public class WeatherFragment extends Fragment {
     private int id;
     private String placesID, placesCountry, placesRegion, placesName;
-    private TextView textViewWind, textViewTemperature, textViewHumidity, textViewCurrentTemperature;
+    private TextView textViewWind, textViewHumidity, textViewCurrentTemperature,
+        textViewWeatherUpdateTime, textViewCurrentDayData;
+    private ImageView imageViewCurrentWeatherIcon, imageViewUpdateWeather;
     private Calendar calendar;
+    private View view;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,23 +48,36 @@ public class WeatherFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_weather, null);
+        view = inflater.inflate(R.layout.fragment_weather, null);
+
+        Utils.getHourForecastWeather(placesID);
 
         Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Thin.ttf");
 
-        TextView textViewCurrentDayData = (TextView) view.findViewById(R.id.text_view_current_day_data);
+        imageViewCurrentWeatherIcon = (ImageView) view.findViewById(R.id.image_view_current_weather);
+        textViewCurrentDayData = (TextView) view.findViewById(R.id.text_view_current_day_data);
         TextView textViewDayData_1 = (TextView) view.findViewById(R.id.text_view_day_data_1);
         TextView textViewDayData_2 = (TextView) view.findViewById(R.id.text_view_day_data_2);
         TextView textViewDayData_3 = (TextView) view.findViewById(R.id.text_view_day_data_3);
         TextView textViewPlaceName = (TextView) view.findViewById(R.id.text_view_place_name);
         textViewWind = (TextView) view.findViewById(R.id.text_view_wind);
-        textViewTemperature = (TextView) view.findViewById(R.id.text_view_temperature);
         textViewHumidity = (TextView) view.findViewById(R.id.text_view_humidity);
         textViewCurrentTemperature = (TextView) view.findViewById(R.id.text_view_current_temperature);
         textViewCurrentTemperature.setTypeface(typeface);
         TextView textViewTemperature_1 = (TextView) view.findViewById(R.id.text_view_temperature_1);
         TextView textViewTemperature_2 = (TextView) view.findViewById(R.id.text_view_temperature_2);
         TextView textViewTemperature_3 = (TextView) view.findViewById(R.id.text_view_temperature_3);
+        textViewWeatherUpdateTime = (TextView) view.findViewById(R.id.text_view_weather_update_time);
+        imageViewUpdateWeather = (ImageView) view.findViewById(R.id.image_view_update_weather);
+        imageViewUpdateWeather.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (placesID != null && placesID.length() > 0) {
+                    getCurrentCondition(placesID);
+                }
+                setUpdatedText("last update: " + getCurrentTimeAndData("", "", true), R.id.text_view_weather_update_time);
+            }
+        });
 
         MainActivity.toolbar.setTitle(placesName);
 
@@ -68,9 +87,8 @@ public class WeatherFragment extends Fragment {
 
         calendar = Calendar.getInstance();
         String currentDayOfWeek = String.valueOf(getWeekDayName(changeFirstDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK) - 1)));
-        String currentHour = String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
-        String currentMinute = String.valueOf(calendar.get(Calendar.MINUTE));
-        textViewCurrentDayData.setText(currentDayOfWeek + "  " + currentHour + ":" + currentMinute);
+        textViewCurrentDayData.setText(getCurrentTimeAndData(currentDayOfWeek, " ", false));
+        textViewWeatherUpdateTime.setText("last update: " + getCurrentTimeAndData("", "", true));
 
         calendar.add(Calendar.DAY_OF_WEEK, 1);
         String dayOfWeek_1 = String.valueOf(getWeekDayName(changeFirstDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK) - 1)));
@@ -99,20 +117,17 @@ public class WeatherFragment extends Fragment {
                 int currentHumidity = (int) currentWeather.weather.currentCondition.getHumidity();
                 int currentWindSpeed = (int) currentWeather.weather.wind.getSpeed();
 
-                textViewWind.setText(String.valueOf(currentWindSpeed) + " m/s");
-                textViewTemperature.setText(String.valueOf(currentTemperature) + "\u00b0");
-                textViewCurrentTemperature.setText(String.valueOf(currentTemperature) + "\u00b0");
-                textViewHumidity.setText(String.valueOf(currentHumidity) + " mm");
+                textViewWind.setText(String.valueOf(currentWindSpeed) + " " + currentWeather.getUnit().speedUnit);
+                textViewCurrentTemperature.setText(String.valueOf(currentTemperature) + " " + currentWeather.getUnit().tempUnit);
+                textViewHumidity.setText(String.valueOf(currentHumidity) + " %");
+                imageViewCurrentWeatherIcon.setImageResource(WeatherIconMapper.getWeatherResource(currentWeather.weather.currentCondition.getIcon(), currentWeather.weather.currentCondition.getWeatherId()));
 
-//                weatherIcon.setImageResource(WeatherIconMapper.getWeatherResource(currentWeather.weather.currentCondition.getIcon(), currentWeather.weather.currentCondition.getWeatherId()));
-//
 //                setToolbarColor(currentWeather.weather.temperature.getTemp());
             }
 
             @Override
             public void onWeatherError(WeatherLibException weatherLibException) {
                 Log.e("mylog", "weather lib exception");
-                Log.e("mylog", String.valueOf(weatherLibException));
             }
 
             @Override
@@ -120,6 +135,13 @@ public class WeatherFragment extends Fragment {
                 Log.e("mylog", "connection error");
             }
         });
+    }
+
+    public void setUpdatedText(String text, int id) {
+        if (getView() != null) {
+            TextView textView = (TextView) getView().findViewById(id);
+            textView.setText(text);
+        }
     }
 
     public String getWeekDayName(int weekDay) {
@@ -149,6 +171,38 @@ public class WeatherFragment extends Fragment {
             return dayOfWeek;
         } else {
             return dayOfWeek;
+        }
+    }
+
+    public String getCurrentTimeAndData(String currentDayOfWeek, String backspace, boolean showSeconds) {
+        int tempHour, tempMinute, tempSeconds;
+        String currentHour = null, currentMinute = null, currentSeconds = null;
+        calendar = Calendar.getInstance();
+        tempHour = calendar.get(Calendar.HOUR_OF_DAY);
+        if (tempHour < 10) {
+            currentHour = "0" + tempHour;
+        } else {
+            currentHour = String.valueOf(tempHour);
+        }
+
+        tempMinute = calendar.get(Calendar.MINUTE);
+        if (tempMinute < 10) {
+            currentMinute = "0" + tempMinute;
+        } else {
+            currentMinute = String.valueOf(tempMinute);
+        }
+
+        tempSeconds = calendar.get(Calendar.SECOND);
+        if (tempSeconds < 10) {
+            currentSeconds = "0" + tempSeconds;
+        } else {
+            currentSeconds = String.valueOf(tempSeconds);
+        }
+
+        if (showSeconds) {
+            return currentDayOfWeek + backspace + currentHour + ":" + currentMinute + ":" + currentSeconds;
+        } else {
+            return currentDayOfWeek + backspace + currentHour + ":" + currentMinute;
         }
     }
 }
