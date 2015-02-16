@@ -14,20 +14,24 @@ import android.widget.TextView;
 import com.example.ssereda.tinyweather.MainActivity;
 import com.example.ssereda.tinyweather.R;
 import com.example.ssereda.tinyweather.utils.DBHelper;
-import com.example.ssereda.tinyweather.utils.Utils;
 import com.example.ssereda.tinyweather.utils.WeatherIconMapper;
 import com.survivingwithandroid.weather.lib.WeatherClient;
 import com.survivingwithandroid.weather.lib.exception.WeatherLibException;
 import com.survivingwithandroid.weather.lib.model.CurrentWeather;
+import com.survivingwithandroid.weather.lib.model.DayForecast;
+import com.survivingwithandroid.weather.lib.model.WeatherForecast;
 import com.survivingwithandroid.weather.lib.request.WeatherRequest;
 
 import java.util.Calendar;
+import java.util.List;
 
 public class WeatherFragment extends Fragment {
     private int id;
-    private String placesID, placesCountry, placesRegion, placesName;
+    public static String placesID;
+    private String placesCountry, placesRegion, placesName;
     private TextView textViewWind, textViewHumidity, textViewCurrentTemperature,
-        textViewWeatherUpdateTime, textViewCurrentDayData;
+        textViewWeatherUpdateTime, textViewCurrentDayData, textViewTemperature_1,
+            textViewTemperature_2, textViewTemperature_3;
     private ImageView imageViewCurrentWeatherIcon, imageViewUpdateWeather;
     private Calendar calendar;
     private View view;
@@ -50,8 +54,6 @@ public class WeatherFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_weather, null);
 
-        Utils.getHourForecastWeather(placesID);
-
         Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Thin.ttf");
 
         imageViewCurrentWeatherIcon = (ImageView) view.findViewById(R.id.image_view_current_weather);
@@ -64,9 +66,9 @@ public class WeatherFragment extends Fragment {
         textViewHumidity = (TextView) view.findViewById(R.id.text_view_humidity);
         textViewCurrentTemperature = (TextView) view.findViewById(R.id.text_view_current_temperature);
         textViewCurrentTemperature.setTypeface(typeface);
-        TextView textViewTemperature_1 = (TextView) view.findViewById(R.id.text_view_temperature_1);
-        TextView textViewTemperature_2 = (TextView) view.findViewById(R.id.text_view_temperature_2);
-        TextView textViewTemperature_3 = (TextView) view.findViewById(R.id.text_view_temperature_3);
+        textViewTemperature_1 = (TextView) view.findViewById(R.id.text_view_temperature_1);
+        textViewTemperature_2 = (TextView) view.findViewById(R.id.text_view_temperature_2);
+        textViewTemperature_3 = (TextView) view.findViewById(R.id.text_view_temperature_3);
         textViewWeatherUpdateTime = (TextView) view.findViewById(R.id.text_view_weather_update_time);
         imageViewUpdateWeather = (ImageView) view.findViewById(R.id.image_view_update_weather);
         imageViewUpdateWeather.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +76,7 @@ public class WeatherFragment extends Fragment {
             public void onClick(View v) {
                 if (placesID != null && placesID.length() > 0) {
                     getCurrentCondition(placesID);
+                    getForecastWeather(placesID);
                 }
                 setUpdatedText("last update: " + getCurrentTimeAndData("", "", true), R.id.text_view_weather_update_time);
             }
@@ -83,6 +86,7 @@ public class WeatherFragment extends Fragment {
 
         if (placesID != null && placesID.length() > 0) {
             getCurrentCondition(placesID);
+            getForecastWeather(placesID);
         }
 
         calendar = Calendar.getInstance();
@@ -128,6 +132,28 @@ public class WeatherFragment extends Fragment {
             @Override
             public void onWeatherError(WeatherLibException weatherLibException) {
                 Log.e("mylog", "weather lib exception");
+            }
+
+            @Override
+            public void onConnectionError(Throwable t) {
+                Log.e("mylog", "connection error");
+            }
+        });
+    }
+
+    public void getForecastWeather(String cityID) {
+        MainActivity.weatherClient.getForecastWeather(cityID, new WeatherClient.ForecastWeatherEventListener() {
+            @Override
+            public void onWeatherRetrieved(WeatherForecast weatherForecast) {
+                List<DayForecast> forecast = weatherForecast.getForecast();
+                textViewTemperature_1.setText((int) forecast.get(0).forecastTemp.day + " " + weatherForecast.getUnit().tempUnit);
+                textViewTemperature_2.setText((int) forecast.get(1).forecastTemp.day + " " + weatherForecast.getUnit().tempUnit);
+                textViewTemperature_3.setText((int) forecast.get(2).forecastTemp.day + " " + weatherForecast.getUnit().tempUnit);
+            }
+
+            @Override
+            public void onWeatherError(WeatherLibException t) {
+                Log.e("mylog", "weather error");
             }
 
             @Override

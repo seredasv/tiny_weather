@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.example.ssereda.tinyweather.adapters.NavigationDrawerAdapter;
 import com.example.ssereda.tinyweather.fragments.AddCityFragment;
+import com.example.ssereda.tinyweather.fragments.HourWeatherFragment;
 import com.example.ssereda.tinyweather.fragments.WeatherFragment;
 import com.example.ssereda.tinyweather.utils.DBHelper;
 import com.example.ssereda.tinyweather.utils.Utils;
@@ -39,6 +40,7 @@ import java.lang.reflect.Field;
 public class MainActivity extends ActionBarActivity {
     public static final String WEATHER_FRAGMENT = "weather_fragment";
     public static final String ADD_CITY_FRAGMENT = "add_city_fragment";
+    public static final String HOUR_WEATHER_FORECAST_FRAGMENT = "hour_weather_forecast_fragment";
     public static NavigationDrawerAdapter adapter;
     public static DrawerLayout drawerLayout;
     public static ListView drawerListView;
@@ -48,12 +50,9 @@ public class MainActivity extends ActionBarActivity {
     private static long back_pressed;
     int backStack = 0;
     private ActionBarDrawerToggle actionBarDrawerToggle;
-    private boolean closeDrawer = false;
-    private int openFragment;
     private FrameLayout frameLayout;
     private float lastTranslate = 0.0f;
     public static WeatherClient weatherClient;
-    private Cursor cursor;
     public static SharedPreferences sharedPreferences;
 
     @Override
@@ -86,7 +85,6 @@ public class MainActivity extends ActionBarActivity {
 
         setContentView(R.layout.activity_main);
 
-        //        deleteDatabase(DBHelper.DATABASE_NAME);
         if (dbHelper == null) {
             dbHelper = new DBHelper(this);
         }
@@ -94,17 +92,13 @@ public class MainActivity extends ActionBarActivity {
 
         sharedPreferences = getSharedPreferences("last_place_id", MODE_PRIVATE);
 
-        //instantiate builder
-//        WeatherClient.ClientBuilder builder = new WeatherClient.ClientBuilder();
-
         //Weather config
         WeatherConfig config = new WeatherConfig();
         config.unitSystem = WeatherConfig.UNIT_SYSTEM.M;
         config.lang = "en"; // If you want to use english
-        config.maxResult = 5; // Max number of cities retrieved
-        config.numDays = 6; // Max num of days in the forecast
+        config.maxResult = 10; // Max number of cities retrieved
+        config.numDays = 4; // Max num of days in the forecast
 
-        // Sample WeatherLib weatherClient init
         try {
 
 //            Open weather map -> OpenweathermapProviderType
@@ -118,7 +112,6 @@ public class MainActivity extends ActionBarActivity {
 //                    .config(new WeatherConfig())
                     .config(config)
                     .build();
-
 //            weatherClient.updateWeatherConfig(config);
         } catch (Throwable t) {
             t.printStackTrace();
@@ -142,6 +135,18 @@ public class MainActivity extends ActionBarActivity {
                                 transaction.commit();
                             } else {
                                 transaction.replace(R.id.container, fragment, ADD_CITY_FRAGMENT);
+                                transaction.commit();
+                            }
+                            break;
+                        case R.id.action_hour_forecast:
+                            fragment = new HourWeatherFragment();
+                            transaction = getSupportFragmentManager().beginTransaction();
+                            transaction.addToBackStack(HOUR_WEATHER_FORECAST_FRAGMENT);
+                            if (fragment.isAdded()) {
+                                transaction.show(fragment);
+                                transaction.commit();
+                            } else {
+                                transaction.replace(R.id.container, fragment, HOUR_WEATHER_FORECAST_FRAGMENT);
                                 transaction.commit();
                             }
                             break;
@@ -270,9 +275,6 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 

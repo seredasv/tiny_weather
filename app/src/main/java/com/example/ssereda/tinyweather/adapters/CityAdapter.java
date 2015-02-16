@@ -34,8 +34,7 @@ public class CityAdapter extends ArrayAdapter<City> {
             holder = new ViewHolder();
 
             holder.TVitemCityList = (TextView) view.findViewById(R.id.tv_item_city_list);
-            if (cities.get(position).getId() != null && cities.get(position).getCountry() != null
-                    && cities.get(position).getName() != null) {
+            if (cities.get(position).getName() != null) {
                 holder.TVitemCityList.setText(cities.get(position).getName());
             }
 

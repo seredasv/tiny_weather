@@ -69,6 +69,7 @@
             android:divider="@color/shape_background_color"
             android:listSelector="@drawable/list_selector"
             android:paddingTop="15sp"
+            android:paddingBottom="60sp"
             android:showDividers="middle" />
 
         <LinearLayout

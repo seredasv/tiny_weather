@@ -12,7 +12,6 @@ import com.example.ssereda.tinyweather.adapters.NavigationDrawerAdapter;
 import com.survivingwithandroid.weather.lib.WeatherClient;
 import com.survivingwithandroid.weather.lib.exception.WeatherLibException;
 import com.survivingwithandroid.weather.lib.model.WeatherForecast;
-import com.survivingwithandroid.weather.lib.model.WeatherHourForecast;
 
 public class Utils {
     public static String cityID;
@@ -54,60 +53,5 @@ public class Utils {
             MainActivity.drawerListView.setAdapter(MainActivity.adapter);
             MainActivity.adapter.changeCursor(cursor);
         }
-    }
-
-    public static void getHourForecastWeather(String cityID) {
-        MainActivity.weatherClient.getHourForecastWeather(cityID, new WeatherClient.HourForecastWeatherEventListener() {
-                    @Override
-                    public void onWeatherRetrieved(WeatherHourForecast weatherHourForecast) {
-                        Log.e("mylog", "temp: " + String.valueOf(weatherHourForecast.getHourForecast().get(0).weather.temperature.getTemp()));
-                        Log.e("mylog", "time: " + String.valueOf(weatherHourForecast.getHourForecast().get(0).timestamp));
-                        Log.e("mylog", "clouds: " + String.valueOf(weatherHourForecast.getHourForecast().get(0).weather.clouds.getPerc()));
-//                        Log.e("mylog", "icon: " + String.valueOf(weatherHourForecast.getHourForecast().get(0).weather.iconData.toString()));
-                        Log.e("mylog", "rain: " + String.valueOf(weatherHourForecast.getHourForecast().get(0).weather.rain.toString()));
-                        Log.e("mylog", "snow1: " + String.valueOf(weatherHourForecast.getHourForecast().get(0).weather.snow.getAmmount()));
-                        Log.e("mylog", "snow2: " + String.valueOf(weatherHourForecast.getHourForecast().get(0).weather.snow.getTime()));
-                        Log.e("mylog", "wind1: " + String.valueOf(weatherHourForecast.getHourForecast().get(0).weather.wind.getChill()));
-                        Log.e("mylog", "wind2: " + String.valueOf(weatherHourForecast.getHourForecast().get(0).weather.wind.getDeg()));
-                        Log.e("mylog", "wind3: " + String.valueOf(weatherHourForecast.getHourForecast().get(0).weather.wind.getGust()));
-                        Log.e("mylog", "wind4: " + String.valueOf(weatherHourForecast.getHourForecast().get(0).weather.wind.getSpeed()));
-
-//                        weatherHourForecast.getHourForecast().get(0).timestamp;
-//                        weatherHourForecast.getHourForecast().get(0).weather.clouds;
-//                        weatherHourForecast.getHourForecast().get(0).weather.iconData;
-//                        weatherHourForecast.getHourForecast().get(0).weather.rain;
-//                        weatherHourForecast.getHourForecast().get(0).weather.snow;
-//                        weatherHourForecast.getHourForecast().get(0).weather.wind;
-                    }
-
-                    @Override
-                    public void onWeatherError(WeatherLibException wle) {
-                        Log.e("mylog", "weather error");
-                    }
-
-                    @Override
-                    public void onConnectionError(Throwable t) {
-                        Log.e("mylog", "connection error");
-                    }
-                }
-        );
-    }
-
-    public void getForecastWeather(final String cityID) {
-        MainActivity.weatherClient.getForecastWeather(cityID, new WeatherClient.ForecastWeatherEventListener() {
-            @Override
-            public void onWeatherRetrieved(WeatherForecast weatherForecast) {
-            }
-
-            @Override
-            public void onWeatherError(WeatherLibException t) {
-                Log.e("mylog", "weather error");
-            }
-
-            @Override
-            public void onConnectionError(Throwable t) {
-                Log.e("mylog", "connection error");
-            }
-        });
     }
 }

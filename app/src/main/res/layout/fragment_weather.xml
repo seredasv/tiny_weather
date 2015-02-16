@@ -218,7 +218,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:textColor="@color/weather_fragment_text_color"
-                    android:textSize="50sp" />
+                    android:textSize="40sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -242,7 +242,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:textColor="@color/weather_fragment_text_color"
-                    android:textSize="50sp" />
+                    android:textSize="40sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -266,7 +266,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:textColor="@color/weather_fragment_text_color"
-                    android:textSize="50sp" />
+                    android:textSize="40sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

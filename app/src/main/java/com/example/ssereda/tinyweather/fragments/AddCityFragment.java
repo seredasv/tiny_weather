@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ssereda.tinyweather.MainActivity;
 import com.example.ssereda.tinyweather.R;
@@ -73,6 +74,7 @@ public class AddCityFragment extends Fragment {
                     MainActivity.db.insert(DBHelper.TABLE_PLACES, null, contentValues);
                 }
 
+                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.toast_add_city), Toast.LENGTH_SHORT).show();
                 Utils.createNavigationDrawerAdapter(getActivity());
             }
         });
