@@ -5,5 +5,7 @@ import android.widget.TextView;
 
 public class ViewHolder {
     public TextView TVitemCityList, tvItemHourForecastTimestamp, tvItemHourForecastTemperature,
-            tvItemHourForecastWind;
+            tvItemHourForecastWind, tvItemDayForecastTimestamp, tvItemDayForecastTemperature,
+            tvItemDayForecastWind;
+    public ImageView ivItemHourForecastIcon, ivItemDayForecastIcon;
 }

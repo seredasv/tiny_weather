@@ -25,7 +25,6 @@ public class HourWeatherFragment extends Fragment {
         ListView lvHourForecast = (ListView) view.findViewById(R.id.lv_hour_forecast);
 
         if (WeatherFragment.placesID != null && WeatherFragment.placesID.length() > 0) {
-            Log.e("mylog", "send to method");
             getHourForecastWeather(getActivity(), WeatherFragment.placesID, lvHourForecast);
         }
 
@@ -37,7 +36,6 @@ public class HourWeatherFragment extends Fragment {
                     @Override
                     public void onWeatherRetrieved(WeatherHourForecast weatherHourForecast) {
                         if (weatherHourForecast != null) {
-                            Log.e("mylog", "send to listview");
                             HourForecastAdapter adapter = new HourForecastAdapter(context, R.layout.item_hour_forecast, weatherHourForecast);
                             listView.setAdapter(adapter);
                         }

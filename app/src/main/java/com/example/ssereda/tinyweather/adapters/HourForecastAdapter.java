@@ -5,10 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ssereda.tinyweather.R;
 import com.example.ssereda.tinyweather.utils.ViewHolder;
+import com.example.ssereda.tinyweather.utils.WeatherIconMapper;
 import com.survivingwithandroid.weather.lib.model.HourForecast;
 import com.survivingwithandroid.weather.lib.model.WeatherHourForecast;
 
@@ -45,6 +47,7 @@ public class HourForecastAdapter extends ArrayAdapter<WeatherHourForecast> {
             holder.tvItemHourForecastTimestamp = (TextView) view.findViewById(R.id.tv_item_hour_forecast_timestamp);
             holder.tvItemHourForecastTemperature = (TextView) view.findViewById(R.id.tv_item_hour_forecast_temperature);
             holder.tvItemHourForecastWind = (TextView) view.findViewById(R.id.tv_item_hour_forecast_wind);
+            holder.ivItemHourForecastIcon = (ImageView) view.findViewById(R.id.iv_item_hour_forecast_icon);
 
             view.setTag(holder);
         } else {
@@ -53,7 +56,7 @@ public class HourForecastAdapter extends ArrayAdapter<WeatherHourForecast> {
 
         HourForecast forecast = weatherHourForecast.getHourForecast().get(position);
         Date d = new Date();
-        Calendar gc =  new GregorianCalendar();
+        Calendar gc = new GregorianCalendar();
         gc.setTime(d);
         gc.add(GregorianCalendar.HOUR, position + 1);
         SimpleDateFormat sdfDay = new SimpleDateFormat("E");
@@ -64,6 +67,9 @@ public class HourForecastAdapter extends ArrayAdapter<WeatherHourForecast> {
             holder.tvItemHourForecastTimestamp.setText(sdfHour.format(gc.getTime()) + ":00");
             holder.tvItemHourForecastTemperature.setText(String.valueOf((int) weatherHourForecast.getHourForecast().get(position).weather.temperature.getTemp()) + " " + weatherHourForecast.getUnit().tempUnit);
             holder.tvItemHourForecastWind.setText(String.valueOf((int) weatherHourForecast.getHourForecast().get(position).weather.wind.getSpeed()) + " " + weatherHourForecast.getUnit().speedUnit);
+            holder.ivItemHourForecastIcon.setImageResource(WeatherIconMapper.getWeatherResource(weatherHourForecast.getHourForecast().get(position).weather.currentCondition.getIcon(),
+                    weatherHourForecast.getHourForecast().get(position).weather.currentCondition.getWeatherId()));
+
         }
 
         return view;

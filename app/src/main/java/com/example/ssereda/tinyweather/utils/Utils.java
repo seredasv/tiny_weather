@@ -4,18 +4,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
-
 import com.example.ssereda.tinyweather.MainActivity;
 import com.example.ssereda.tinyweather.R;
 import com.example.ssereda.tinyweather.adapters.NavigationDrawerAdapter;
-import com.survivingwithandroid.weather.lib.WeatherClient;
-import com.survivingwithandroid.weather.lib.exception.WeatherLibException;
-import com.survivingwithandroid.weather.lib.model.WeatherForecast;
 
 public class Utils {
-    public static String cityID;
-
     public static boolean isWifiConnected(Context context) {
         ConnectivityManager connManager = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);

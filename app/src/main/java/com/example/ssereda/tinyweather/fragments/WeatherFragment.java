@@ -29,12 +29,14 @@ public class WeatherFragment extends Fragment {
     private int id;
     public static String placesID;
     private String placesCountry, placesRegion, placesName;
-    private TextView textViewWind, textViewHumidity, textViewCurrentTemperature,
-        textViewWeatherUpdateTime, textViewCurrentDayData, textViewTemperature_1,
-            textViewTemperature_2, textViewTemperature_3;
-    private ImageView imageViewCurrentWeatherIcon, imageViewUpdateWeather;
+    private TextView textViewWind;
+    private TextView textViewHumidity;
+    private TextView textViewCurrentTemperature;
+    private TextView textViewTemperature_1;
+    private TextView textViewTemperature_2;
+    private TextView textViewTemperature_3;
+    private ImageView imageViewCurrentWeatherIcon;
     private Calendar calendar;
-    private View view;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,12 +54,12 @@ public class WeatherFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_weather, null);
+        View view = inflater.inflate(R.layout.fragment_weather, null);
 
         Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Thin.ttf");
 
         imageViewCurrentWeatherIcon = (ImageView) view.findViewById(R.id.image_view_current_weather);
-        textViewCurrentDayData = (TextView) view.findViewById(R.id.text_view_current_day_data);
+        TextView textViewCurrentDayData = (TextView) view.findViewById(R.id.text_view_current_day_data);
         TextView textViewDayData_1 = (TextView) view.findViewById(R.id.text_view_day_data_1);
         TextView textViewDayData_2 = (TextView) view.findViewById(R.id.text_view_day_data_2);
         TextView textViewDayData_3 = (TextView) view.findViewById(R.id.text_view_day_data_3);
@@ -69,8 +71,8 @@ public class WeatherFragment extends Fragment {
         textViewTemperature_1 = (TextView) view.findViewById(R.id.text_view_temperature_1);
         textViewTemperature_2 = (TextView) view.findViewById(R.id.text_view_temperature_2);
         textViewTemperature_3 = (TextView) view.findViewById(R.id.text_view_temperature_3);
-        textViewWeatherUpdateTime = (TextView) view.findViewById(R.id.text_view_weather_update_time);
-        imageViewUpdateWeather = (ImageView) view.findViewById(R.id.image_view_update_weather);
+        TextView textViewWeatherUpdateTime = (TextView) view.findViewById(R.id.text_view_weather_update_time);
+        ImageView imageViewUpdateWeather = (ImageView) view.findViewById(R.id.image_view_update_weather);
         imageViewUpdateWeather.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

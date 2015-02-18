@@ -8,6 +8,7 @@
     <string name="action_add_city">Add City</string>
     <string name="action_weather_fragment">Weather</string>
     <string name="action_hour_forecast_fragment">Hour Forecast</string>
+    <string name="action_day_forecast_fragment">Daily Forecast</string>
 
     <!--add a new city-->
     <string name="add_city">Add a new city</string>
