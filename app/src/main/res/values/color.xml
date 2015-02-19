@@ -9,7 +9,6 @@
     <!--Material-->
     <color name="material_action_bar">#f27147</color>
     <color name="material_navigation_drawer_background">#f27147</color>
-    <color name="material_navigation_drawer_background_pressed">#6293e8</color>
     <color name="button_background">#5d8bdd</color>
     <color name="progress_bar_color">#ee8100</color>
     <color name="repeat_shuffle_buttons_color">#f0f0f0</color>

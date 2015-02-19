@@ -56,6 +56,8 @@ public class MainActivity extends ActionBarActivity {
 //    private CustomPagerAdapter customPagerAdapter;
 //    private ViewPager viewPager;
 
+    //TODO change icons size (cancel, update view, etc..)
+
     @Override
     public void onBackPressed() {
 //        if (drawerLayout.isDrawerOpen(Gravity.START)) {

@@ -2,39 +2,41 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/activatedBackgroundIndicator"
     android:descendantFocusability="blocksDescendants"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="@drawable/list_selector">
 
-        <LinearLayout
-            android:id="@+id/linear_layout_item_layout"
-            android:layout_width="210sp"
-            android:layout_height="50sp">
-            <TextView
-                android:id="@+id/label"
-                android:layout_width="match_parent"
-                android:layout_height="50sp"
-                android:gravity="left|center_vertical"
-                android:paddingLeft="20sp"
-                android:textColor="@color/text_color_black"
-                android:textSize="18sp" />
-        </LinearLayout>
+    <LinearLayout
+        android:id="@+id/linear_layout_item_layout"
+        android:layout_width="210sp"
+        android:layout_height="50sp">
 
-        <LinearLayout
-            android:id="@+id/linear_layout_delete_place"
-            android:layout_width="40sp"
+        <TextView
+            android:id="@+id/label"
+            android:layout_width="match_parent"
             android:layout_height="50sp"
-            android:gravity="center_vertical|right">
+            android:gravity="start|center_vertical"
+            android:paddingLeft="20sp"
+            android:textColor="@drawable/list_selector_text"
+            android:textSize="18sp" />
+    </LinearLayout>
 
-            <ImageView
-                android:id="@+id/image_view_delete_place"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginRight="20sp"
-                android:background="@drawable/image_button_cancel"
-                android:enabled="true"
-                android:focusable="true"
-                android:focusableInTouchMode="true"/>
-        </LinearLayout>
+    <LinearLayout
+        android:id="@+id/linear_layout_delete_place"
+        android:layout_width="40sp"
+        android:layout_height="50sp"
+        android:gravity="center_vertical|end">
+
+        <ImageView
+            android:id="@+id/image_view_delete_place"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="20sp"
+            android:layout_marginEnd="20sp"
+            android:background="@drawable/list_selector_icon"
+            android:enabled="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+    </LinearLayout>
 </LinearLayout>
