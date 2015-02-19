@@ -28,4 +28,6 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.2.0'
     // change font
     compile 'uk.co.chrisjenx:calligraphy:2.0.1'
+    // fragment transitions
+    compile 'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.1.0@aar'
 }

@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.ViewDragHelper;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -36,8 +35,6 @@ import com.survivingwithandroid.weather.lib.WeatherConfig;
 import com.survivingwithandroid.weather.lib.client.okhttp.WeatherDefaultClient;
 import com.survivingwithandroid.weather.lib.provider.openweathermap.OpenweathermapProviderType;
 
-import java.lang.reflect.Field;
-
 public class MainActivity extends ActionBarActivity {
     public static final String WEATHER_FRAGMENT = "weather_fragment";
     public static final String ADD_CITY_FRAGMENT = "add_city_fragment";
@@ -56,9 +53,27 @@ public class MainActivity extends ActionBarActivity {
     private float lastTranslate = 0.0f;
     public static WeatherClient weatherClient;
     public static SharedPreferences sharedPreferences;
+//    private CustomPagerAdapter customPagerAdapter;
+//    private ViewPager viewPager;
 
     @Override
     public void onBackPressed() {
+//        if (drawerLayout.isDrawerOpen(Gravity.START)) {
+//            drawerLayout.closeDrawer(Gravity.START);
+//        } else {
+//            if (viewPager.getCurrentItem() == 0) {
+//                if (back_pressed + 2000 > System.currentTimeMillis()) {
+//                    super.onBackPressed();
+//                } else {
+//                    Toast.makeText(getBaseContext(), getResources().getString(R.string.toast_exit),
+//                            Toast.LENGTH_SHORT).show();
+//                }
+//                back_pressed = System.currentTimeMillis();
+//            } else {
+//                viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+//            }
+//        }
+
         int count = getSupportFragmentManager().getBackStackEntryCount();
 
         if (drawerLayout.isDrawerOpen(Gravity.START)) {
@@ -87,6 +102,10 @@ public class MainActivity extends ActionBarActivity {
 
         setContentView(R.layout.activity_main);
 
+//        customPagerAdapter = new CustomPagerAdapter(getSupportFragmentManager());
+//        viewPager = (ViewPager) findViewById(R.id.container);
+//        viewPager.setAdapter(customPagerAdapter);
+
         if (dbHelper == null) {
             dbHelper = new DBHelper(this);
         }
@@ -99,7 +118,7 @@ public class MainActivity extends ActionBarActivity {
         config.unitSystem = WeatherConfig.UNIT_SYSTEM.M;
         config.lang = "en"; // If you want to use english
         config.maxResult = 10; // Max number of cities retrieved
-        config.numDays = 11; // Max num of days in the forecast
+        config.numDays = 10; // Max num of days in the forecast
 
         try {
 
@@ -111,10 +130,8 @@ public class MainActivity extends ActionBarActivity {
             weatherClient = (new WeatherClient.ClientBuilder()).attach(this)
                     .httpClient(WeatherDefaultClient.class)
                     .provider(new OpenweathermapProviderType())
-//                    .config(new WeatherConfig())
                     .config(config)
                     .build();
-//            weatherClient.updateWeatherConfig(config);
         } catch (Throwable t) {
             t.printStackTrace();
         }
@@ -233,51 +250,51 @@ public class MainActivity extends ActionBarActivity {
         actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
 
         // change touch area to open drawer:
-        Field mDragger = null;
-        try {
-            mDragger = drawerLayout.getClass().getDeclaredField("mLeftDragger");
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-        if (mDragger != null) {
-            mDragger.setAccessible(true);
-        }
-        ViewDragHelper draggerObj = null;
-        try {
-            if (mDragger != null) {
-                draggerObj = (ViewDragHelper) mDragger.get(drawerLayout);
-            }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-        Field mEdgeSize = null;
-        try {
-            if (draggerObj != null) {
-                mEdgeSize = draggerObj.getClass().getDeclaredField("mEdgeSize");
-            }
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-        if (mEdgeSize != null) {
-            mEdgeSize.setAccessible(true);
-        }
-        int edge = 0;
-        try {
-            if (mEdgeSize != null) {
-                edge = mEdgeSize.getInt(draggerObj);
-            }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            if (mEdgeSize != null) {
-                mEdgeSize.setInt(draggerObj, edge * 5);
-            }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+//        Field mDragger = null;
+//        try {
+//            mDragger = drawerLayout.getClass().getDeclaredField("mLeftDragger");
+//        } catch (NoSuchFieldException e) {
+//            e.printStackTrace();
+//        }
+//        if (mDragger != null) {
+//            mDragger.setAccessible(true);
+//        }
+//        ViewDragHelper draggerObj = null;
+//        try {
+//            if (mDragger != null) {
+//                draggerObj = (ViewDragHelper) mDragger.get(drawerLayout);
+//            }
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
+//
+//        Field mEdgeSize = null;
+//        try {
+//            if (draggerObj != null) {
+//                mEdgeSize = draggerObj.getClass().getDeclaredField("mEdgeSize");
+//            }
+//        } catch (NoSuchFieldException e) {
+//            e.printStackTrace();
+//        }
+//        if (mEdgeSize != null) {
+//            mEdgeSize.setAccessible(true);
+//        }
+//        int edge = 0;
+//        try {
+//            if (mEdgeSize != null) {
+//                edge = mEdgeSize.getInt(draggerObj);
+//            }
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
+//
+//        try {
+//            if (mEdgeSize != null) {
+//                mEdgeSize.setInt(draggerObj, edge * 5);
+//            }
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override
@@ -334,8 +351,8 @@ public class MainActivity extends ActionBarActivity {
                         bundle.putString(DBHelper.PLACES_NAME, cursor.getString(cursor.getColumnIndex(DBHelper.PLACES_NAME)));
                         fragment.setArguments(bundle);
 
-                        if (MainActivity.sharedPreferences != null) {
-                            SharedPreferences.Editor editor = MainActivity.sharedPreferences.edit();
+                        if (sharedPreferences != null) {
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putString(DBHelper.ID, cursor.getString(cursor.getColumnIndex(DBHelper.ID)));
                             editor.apply();
                         }

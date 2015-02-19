@@ -40,6 +40,14 @@ public class NavigationDrawerAdapter extends SimpleCursorAdapter {
                 MainActivity.drawerListView.setItemChecked(position, true);
                 MainActivity.drawerListView.setSelection(position);
 
+//                FragmentManager fragmentManager = ((MainActivity) context).getSupportFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                Fragment fragment = fragmentManager.findFragmentByTag(WEATHER_FRAGMENT);
+//                if (fragment != null) {
+//                    fragmentTransaction.replace(R.id.container, fragment, WEATHER_FRAGMENT);
+//                    fragmentTransaction.commit();
+//                }
+
                 Fragment fragment = new WeatherFragment();
 
                 if (cursor.moveToPosition(position)) {

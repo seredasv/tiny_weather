@@ -5,4 +5,5 @@
 
     <!--weather fragment-->
     <dimen name="weather_fragment_middle_right_text_size">80sp</dimen>
+    <dimen name="weather_fragment_small_right_text_size">30sp</dimen>
 </resources>

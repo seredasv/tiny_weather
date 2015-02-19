@@ -22,21 +22,23 @@ import com.survivingwithandroid.weather.lib.model.DayForecast;
 import com.survivingwithandroid.weather.lib.model.WeatherForecast;
 import com.survivingwithandroid.weather.lib.request.WeatherRequest;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 public class WeatherFragment extends Fragment {
     private int id;
     public static String placesID;
     private String placesCountry, placesRegion, placesName;
-    private TextView textViewWind;
-    private TextView textViewHumidity;
-    private TextView textViewCurrentTemperature;
-    private TextView textViewTemperature_1;
-    private TextView textViewTemperature_2;
-    private TextView textViewTemperature_3;
+    private TextView tvWind, tvHumidity, tvCurrentTemperature, tvTemperature_1, tvTemperature_2,
+            tvTemperature_3;
     private ImageView imageViewCurrentWeatherIcon;
-    private Calendar calendar;
+    private Calendar gregorianCalendar;
+    private SimpleDateFormat sdfTime;
+    private Date date;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,20 +61,28 @@ public class WeatherFragment extends Fragment {
         Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Thin.ttf");
 
         imageViewCurrentWeatherIcon = (ImageView) view.findViewById(R.id.image_view_current_weather);
-        TextView textViewCurrentDayData = (TextView) view.findViewById(R.id.text_view_current_day_data);
-        TextView textViewDayData_1 = (TextView) view.findViewById(R.id.text_view_day_data_1);
-        TextView textViewDayData_2 = (TextView) view.findViewById(R.id.text_view_day_data_2);
-        TextView textViewDayData_3 = (TextView) view.findViewById(R.id.text_view_day_data_3);
-        TextView textViewPlaceName = (TextView) view.findViewById(R.id.text_view_place_name);
-        textViewWind = (TextView) view.findViewById(R.id.text_view_wind);
-        textViewHumidity = (TextView) view.findViewById(R.id.text_view_humidity);
-        textViewCurrentTemperature = (TextView) view.findViewById(R.id.text_view_current_temperature);
-        textViewCurrentTemperature.setTypeface(typeface);
-        textViewTemperature_1 = (TextView) view.findViewById(R.id.text_view_temperature_1);
-        textViewTemperature_2 = (TextView) view.findViewById(R.id.text_view_temperature_2);
-        textViewTemperature_3 = (TextView) view.findViewById(R.id.text_view_temperature_3);
-        TextView textViewWeatherUpdateTime = (TextView) view.findViewById(R.id.text_view_weather_update_time);
+        TextView tvCurrentDayData = (TextView) view.findViewById(R.id.text_view_current_day_data);
+        TextView tvDayData_1 = (TextView) view.findViewById(R.id.text_view_day_data_1);
+        TextView tvDayData_2 = (TextView) view.findViewById(R.id.text_view_day_data_2);
+        TextView tvDayData_3 = (TextView) view.findViewById(R.id.text_view_day_data_3);
+        TextView tvPlaceName = (TextView) view.findViewById(R.id.text_view_place_name);
+        tvWind = (TextView) view.findViewById(R.id.text_view_wind);
+        tvHumidity = (TextView) view.findViewById(R.id.text_view_humidity);
+        tvCurrentTemperature = (TextView) view.findViewById(R.id.text_view_current_temperature);
+        tvCurrentTemperature.setTypeface(typeface);
+        tvTemperature_1 = (TextView) view.findViewById(R.id.text_view_temperature_1);
+        tvTemperature_2 = (TextView) view.findViewById(R.id.text_view_temperature_2);
+        tvTemperature_3 = (TextView) view.findViewById(R.id.text_view_temperature_3);
+        TextView tvWeatherUpdateTime = (TextView) view.findViewById(R.id.text_view_weather_update_time);
         ImageView imageViewUpdateWeather = (ImageView) view.findViewById(R.id.image_view_update_weather);
+
+        date = new Date();
+        gregorianCalendar = new GregorianCalendar();
+        gregorianCalendar.setTime(date);
+        SimpleDateFormat sdfWeekDay = new SimpleDateFormat("EEEE", Locale.ENGLISH);
+        SimpleDateFormat sdfWeekDayAndTime = new SimpleDateFormat("EEEE HH:mm", Locale.ENGLISH);
+        sdfTime = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
+
         imageViewUpdateWeather.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +90,8 @@ public class WeatherFragment extends Fragment {
                     getCurrentCondition(placesID);
                     getForecastWeather(placesID);
                 }
-                setUpdatedText("last update: " + getCurrentTimeAndData("", "", true), R.id.text_view_weather_update_time);
+
+                setUpdatedText(R.id.text_view_weather_update_time);
             }
         });
 
@@ -91,25 +102,20 @@ public class WeatherFragment extends Fragment {
             getForecastWeather(placesID);
         }
 
-        calendar = Calendar.getInstance();
-        String currentDayOfWeek = String.valueOf(getWeekDayName(changeFirstDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK) - 1)));
-        textViewCurrentDayData.setText(getCurrentTimeAndData(currentDayOfWeek, " ", false));
-        textViewWeatherUpdateTime.setText("last update: " + getCurrentTimeAndData("", "", true));
+        tvCurrentDayData.setText(sdfWeekDayAndTime.format(gregorianCalendar.getTime()));
+        tvWeatherUpdateTime.setText("last update: " + sdfTime.format(gregorianCalendar.getTime()));
 
-        calendar.add(Calendar.DAY_OF_WEEK, 1);
-        String dayOfWeek_1 = String.valueOf(getWeekDayName(changeFirstDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK) - 1)));
-        textViewDayData_1.setText(dayOfWeek_1);
+        gregorianCalendar.add(GregorianCalendar.DAY_OF_WEEK, 1);
+        tvDayData_1.setText(sdfWeekDay.format(gregorianCalendar.getTime()));
 
-        calendar.add(Calendar.DAY_OF_WEEK, 1);
-        String dayOfWeek_2 = String.valueOf(getWeekDayName(changeFirstDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK) - 1)));
-        textViewDayData_2.setText(dayOfWeek_2);
+        gregorianCalendar.add(GregorianCalendar.DAY_OF_WEEK, 1);
+        tvDayData_2.setText(sdfWeekDay.format(gregorianCalendar.getTime()));
 
-        calendar.add(Calendar.DAY_OF_WEEK, 1);
-        String dayOfWeek_3 = String.valueOf(getWeekDayName(changeFirstDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK) - 1)));
-        textViewDayData_3.setText(dayOfWeek_3);
+        gregorianCalendar.add(GregorianCalendar.DAY_OF_WEEK, 1);
+        tvDayData_3.setText(sdfWeekDay.format(gregorianCalendar.getTime()));
 
         if (placesName != null && placesName.length() > 0) {
-            textViewPlaceName.setText(placesName);
+            tvPlaceName.setText(placesName);
         }
 
         return view;
@@ -119,13 +125,10 @@ public class WeatherFragment extends Fragment {
         MainActivity.weatherClient.getCurrentCondition(new WeatherRequest(cityID), new WeatherClient.WeatherEventListener() {
             @Override
             public void onWeatherRetrieved(CurrentWeather currentWeather) {
-                int currentTemperature = (int) currentWeather.weather.temperature.getTemp();
-                int currentHumidity = (int) currentWeather.weather.currentCondition.getHumidity();
-                int currentWindSpeed = (int) currentWeather.weather.wind.getSpeed();
-
-                textViewWind.setText(String.valueOf(currentWindSpeed) + " " + currentWeather.getUnit().speedUnit);
-                textViewCurrentTemperature.setText(String.valueOf(currentTemperature) + " " + currentWeather.getUnit().tempUnit);
-                textViewHumidity.setText(String.valueOf(currentHumidity) + " %");
+                tvWind.setText(String.valueOf((int) currentWeather.weather.wind.getSpeed()) + " " + currentWeather.getUnit().speedUnit);
+                tvCurrentTemperature.setText(String.valueOf((int) currentWeather.weather.temperature.getTemp())
+                        + " " + currentWeather.getUnit().tempUnit);
+                tvHumidity.setText(String.valueOf((int) currentWeather.weather.currentCondition.getHumidity()) + " %");
                 imageViewCurrentWeatherIcon.setImageResource(WeatherIconMapper.getWeatherResource(currentWeather.weather.currentCondition.getIcon(), currentWeather.weather.currentCondition.getWeatherId()));
 
 //                setToolbarColor(currentWeather.weather.temperature.getTemp());
@@ -148,9 +151,9 @@ public class WeatherFragment extends Fragment {
             @Override
             public void onWeatherRetrieved(WeatherForecast weatherForecast) {
                 List<DayForecast> forecast = weatherForecast.getForecast();
-                textViewTemperature_1.setText((int) forecast.get(0).forecastTemp.day + " " + weatherForecast.getUnit().tempUnit);
-                textViewTemperature_2.setText((int) forecast.get(1).forecastTemp.day + " " + weatherForecast.getUnit().tempUnit);
-                textViewTemperature_3.setText((int) forecast.get(2).forecastTemp.day + " " + weatherForecast.getUnit().tempUnit);
+                tvTemperature_1.setText((int) forecast.get(1).forecastTemp.day + " " + weatherForecast.getUnit().tempUnit);
+                tvTemperature_2.setText((int) forecast.get(2).forecastTemp.day + " " + weatherForecast.getUnit().tempUnit);
+                tvTemperature_3.setText((int) forecast.get(3).forecastTemp.day + " " + weatherForecast.getUnit().tempUnit);
             }
 
             @Override
@@ -165,72 +168,24 @@ public class WeatherFragment extends Fragment {
         });
     }
 
-    public void setUpdatedText(String text, int id) {
+    public void setUpdatedText(int id) {
+        if (date != null) {
+            date = null;
+        }
+        date = new Date();
+        if (gregorianCalendar != null) {
+            gregorianCalendar = null;
+        }
+        gregorianCalendar = new GregorianCalendar();
+        gregorianCalendar.setTime(date);
+        if (sdfTime != null) {
+            sdfTime = null;
+        }
+        sdfTime = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
+
         if (getView() != null) {
             TextView textView = (TextView) getView().findViewById(id);
-            textView.setText(text);
-        }
-    }
-
-    public String getWeekDayName(int weekDay) {
-        switch (weekDay) {
-            case 1:
-                return "Monday";
-            case 2:
-                return "Tuesday";
-            case 3:
-                return "Wednesday";
-            case 4:
-                return "Thursday";
-            case 5:
-                return "Friday";
-            case 6:
-                return "Saturday";
-            case 7:
-                return "Sunday";
-            default:
-                return "";
-        }
-    }
-
-    public int changeFirstDayOfWeek(int dayOfWeek) {
-        if (dayOfWeek == 0) {
-            dayOfWeek = 7;
-            return dayOfWeek;
-        } else {
-            return dayOfWeek;
-        }
-    }
-
-    public String getCurrentTimeAndData(String currentDayOfWeek, String backspace, boolean showSeconds) {
-        int tempHour, tempMinute, tempSeconds;
-        String currentHour = null, currentMinute = null, currentSeconds = null;
-        calendar = Calendar.getInstance();
-        tempHour = calendar.get(Calendar.HOUR_OF_DAY);
-        if (tempHour < 10) {
-            currentHour = "0" + tempHour;
-        } else {
-            currentHour = String.valueOf(tempHour);
-        }
-
-        tempMinute = calendar.get(Calendar.MINUTE);
-        if (tempMinute < 10) {
-            currentMinute = "0" + tempMinute;
-        } else {
-            currentMinute = String.valueOf(tempMinute);
-        }
-
-        tempSeconds = calendar.get(Calendar.SECOND);
-        if (tempSeconds < 10) {
-            currentSeconds = "0" + tempSeconds;
-        } else {
-            currentSeconds = String.valueOf(tempSeconds);
-        }
-
-        if (showSeconds) {
-            return currentDayOfWeek + backspace + currentHour + ":" + currentMinute + ":" + currentSeconds;
-        } else {
-            return currentDayOfWeek + backspace + currentHour + ":" + currentMinute;
+            textView.setText("last update: " + sdfTime.format(gregorianCalendar.getTime()));
         }
     }
 }
