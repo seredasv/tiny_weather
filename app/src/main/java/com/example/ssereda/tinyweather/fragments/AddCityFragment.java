@@ -55,7 +55,6 @@ public class AddCityFragment extends Fragment {
         if (db != null && db.isOpen()) {
             String[] columns = new String[]{DBHelper.ID, DBHelper.PLACES_ID, DBHelper.PLACES_NAME};
             Cursor cursor = db.query(DBHelper.TABLE_PLACES, columns, null, null, null, null, null);
-            listView.setAdapter(listView.getAdapter());
             ((NavigationDrawerAdapter) listView.getAdapter()).changeCursor(cursor);
         }
     }

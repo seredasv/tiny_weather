@@ -14,11 +14,9 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "tiny_weather";
     private static final int DATABASE_VERSION = 1;
     private static DBHelper instance;
-    private Context context;
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        this.context = context;
     }
 
     public static synchronized DBHelper getInstance(Context context) {

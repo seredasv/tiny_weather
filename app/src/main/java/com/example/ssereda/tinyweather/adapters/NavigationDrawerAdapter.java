@@ -43,6 +43,12 @@ public class NavigationDrawerAdapter extends SimpleCursorAdapter {
     }
 
     @Override
+    public void changeCursor(Cursor cursor) {
+        super.changeCursor(cursor);
+        this.cursor = cursor;
+    }
+
+    @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = super.getView(position, convertView, parent);
         LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.linear_layout_item_layout);
@@ -99,11 +105,9 @@ public class NavigationDrawerAdapter extends SimpleCursorAdapter {
     }
 
     private void updateDrawer() {
-        ListView listView = (ListView) ((MainActivity) context).findViewById(R.id.left_drawer);
         if (db != null && db.isOpen()) {
             String[] columns = new String[]{DBHelper.ID, DBHelper.PLACES_ID, DBHelper.PLACES_NAME};
             Cursor cursor = db.query(DBHelper.TABLE_PLACES, columns, null, null, null, null, null);
-            listView.setAdapter(listView.getAdapter());
             ((NavigationDrawerAdapter) listView.getAdapter()).changeCursor(cursor);
         }
     }

@@ -184,6 +184,8 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+        createNavigationDrawerAdapter(this);
+
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
                 R.string.app_name, R.string.app_name) {
             public void onDrawerClosed(View view) {
@@ -304,8 +306,6 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        createNavigationDrawerAdapter(this);
 
         String lastPlaceID = sharedPreferences.getString(DBHelper.ID, "");
         if (lastPlaceID != null && lastPlaceID.length() > 0) {
