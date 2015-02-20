@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ssereda.tinyweather.R;
-import com.example.ssereda.tinyweather.utils.ViewHolder;
 import com.example.ssereda.tinyweather.utils.WeatherIconMapper;
 import com.survivingwithandroid.weather.lib.model.WeatherHourForecast;
 
@@ -20,12 +19,10 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class HourForecastAdapter extends ArrayAdapter<WeatherHourForecast> {
-    private Context context;
     private WeatherHourForecast weatherHourForecast;
 
     public HourForecastAdapter(Context context, int resource, WeatherHourForecast weatherHourForecast) {
         super(context, resource);
-        this.context = context;
         this.weatherHourForecast = weatherHourForecast;
     }
 
@@ -62,13 +59,19 @@ public class HourForecastAdapter extends ArrayAdapter<WeatherHourForecast> {
 
         if (weatherHourForecast != null) {
             holder.tvItemHourForecastTimestamp.setText(sdf.format(gregorianCalendar.getTime()) + ":00");
-            holder.tvItemHourForecastTemperature.setText(String.valueOf((int) weatherHourForecast.getHourForecast().get(position).weather.temperature.getTemp()) + " " + weatherHourForecast.getUnit().tempUnit);
-            holder.tvItemHourForecastWind.setText(String.valueOf((int) weatherHourForecast.getHourForecast().get(position).weather.wind.getSpeed()) + " " + weatherHourForecast.getUnit().speedUnit);
-            holder.ivItemHourForecastIcon.setImageResource(WeatherIconMapper.getWeatherResource(weatherHourForecast.getHourForecast().get(position).weather.currentCondition.getIcon(),
-                    weatherHourForecast.getHourForecast().get(position).weather.currentCondition.getWeatherId()));
+            holder.tvItemHourForecastTemperature.setText(String.valueOf((int) weatherHourForecast.getHourForecast().get(position).weather.temperature.getTemp())
+                    + " " + weatherHourForecast.getUnit().tempUnit);
+            holder.tvItemHourForecastWind.setText(String.valueOf((int) weatherHourForecast.getHourForecast().get(position).weather.wind.getSpeed())
+                    + " " + weatherHourForecast.getUnit().speedUnit);
+            holder.ivItemHourForecastIcon.setImageResource(WeatherIconMapper.getWeatherResource(weatherHourForecast.getHourForecast().get(position).weather.currentCondition.getIcon(), weatherHourForecast.getHourForecast().get(position).weather.currentCondition.getWeatherId()));
 
         }
 
         return view;
+    }
+
+    public class ViewHolder {
+        public TextView tvItemHourForecastTimestamp, tvItemHourForecastTemperature, tvItemHourForecastWind;
+        public ImageView ivItemHourForecastIcon;
     }
 }

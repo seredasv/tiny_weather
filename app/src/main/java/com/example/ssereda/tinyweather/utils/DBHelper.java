@@ -5,18 +5,27 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
-    public static final String DATABASE_NAME = "tiny_weather";
     public static final String ID = "_id";
-
-    // Saved places
     public static final String TABLE_PLACES = "tiny_weather_places";
     public static final String PLACES_ID = "places_id";
     public static final String PLACES_COUNTRY = "places_country";
     public static final String PLACES_REGION = "places_region";
     public static final String PLACES_NAME = "places_name";
+    private static final String DATABASE_NAME = "tiny_weather";
+    private static final int DATABASE_VERSION = 1;
+    private static DBHelper instance;
+    private Context context;
 
     public DBHelper(Context context) {
-        super(context, DATABASE_NAME, null, 1);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
+    }
+
+    public static synchronized DBHelper getInstance(Context context) {
+        if (instance == null) {
+            instance = new DBHelper(context.getApplicationContext());
+        }
+        return instance;
     }
 
     @Override

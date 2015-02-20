@@ -3,31 +3,43 @@ package com.example.ssereda.tinyweather.adapters;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import com.example.ssereda.tinyweather.MainActivity;
 import com.example.ssereda.tinyweather.R;
 import com.example.ssereda.tinyweather.fragments.WeatherFragment;
 import com.example.ssereda.tinyweather.utils.DBHelper;
-import com.example.ssereda.tinyweather.utils.Utils;
 
 
 public class NavigationDrawerAdapter extends SimpleCursorAdapter {
-    public static final String WEATHER_FRAGMENT = "weather_fragment";
-    Context context;
-    Cursor cursor;
+    private static final String WEATHER_FRAGMENT = "weather_fragment";
+    private Context context;
+    private Cursor cursor;
+    private SQLiteDatabase db;
+    private ListView listView;
+    private DrawerLayout drawerLayout;
+    private SharedPreferences sharedPreferences;
 
-    public NavigationDrawerAdapter(Context context, int layout, Cursor cursor, String[] from, int[] to, int flags) {
+    public NavigationDrawerAdapter(Context context, int layout, Cursor cursor, String[] from,
+                                   int[] to, int flags, SharedPreferences sharedPreferences) {
         super(context, layout, cursor, from, to, flags);
         this.context = context;
         this.cursor = cursor;
+        this.sharedPreferences = sharedPreferences;
+
+        db = DBHelper.getInstance(context).getWritableDatabase();
+        listView = (ListView) ((MainActivity) context).findViewById(R.id.left_drawer);
+        drawerLayout = (DrawerLayout) ((MainActivity) context).findViewById(R.id.drawer_layout);
     }
 
     @Override
@@ -37,16 +49,8 @@ public class NavigationDrawerAdapter extends SimpleCursorAdapter {
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivity.drawerListView.setItemChecked(position, true);
-                MainActivity.drawerListView.setSelection(position);
-
-//                FragmentManager fragmentManager = ((MainActivity) context).getSupportFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                Fragment fragment = fragmentManager.findFragmentByTag(WEATHER_FRAGMENT);
-//                if (fragment != null) {
-//                    fragmentTransaction.replace(R.id.container, fragment, WEATHER_FRAGMENT);
-//                    fragmentTransaction.commit();
-//                }
+                listView.setItemChecked(position, true);
+                listView.setSelection(position);
 
                 Fragment fragment = new WeatherFragment();
 
@@ -54,13 +58,11 @@ public class NavigationDrawerAdapter extends SimpleCursorAdapter {
                     Bundle bundle = new Bundle();
                     bundle.putInt(DBHelper.ID, cursor.getInt(cursor.getColumnIndex(DBHelper.ID)));
                     bundle.putString(DBHelper.PLACES_ID, cursor.getString(cursor.getColumnIndex(DBHelper.PLACES_ID)));
-                    bundle.putString(DBHelper.PLACES_COUNTRY, cursor.getString(cursor.getColumnIndex(DBHelper.PLACES_COUNTRY)));
-                    bundle.putString(DBHelper.PLACES_REGION, cursor.getString(cursor.getColumnIndex(DBHelper.PLACES_REGION)));
                     bundle.putString(DBHelper.PLACES_NAME, cursor.getString(cursor.getColumnIndex(DBHelper.PLACES_NAME)));
                     fragment.setArguments(bundle);
 
-                    if (MainActivity.sharedPreferences != null) {
-                        SharedPreferences.Editor editor = MainActivity.sharedPreferences.edit();
+                    if (sharedPreferences != null) {
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString(DBHelper.ID, cursor.getString(cursor.getColumnIndex(DBHelper.ID)));
                         editor.apply();
                     }
@@ -76,8 +78,8 @@ public class NavigationDrawerAdapter extends SimpleCursorAdapter {
                     transaction.commit();
                 }
 
-                if (MainActivity.drawerLayout != null) {
-                    MainActivity.drawerLayout.closeDrawer(Gravity.START);
+                if (drawerLayout != null) {
+                    drawerLayout.closeDrawer(Gravity.START);
                 }
             }
         });
@@ -87,14 +89,22 @@ public class NavigationDrawerAdapter extends SimpleCursorAdapter {
             public void onClick(View v) {
                 if (cursor.moveToPosition(position)) {
                     String id = cursor.getString(cursor.getColumnIndex(DBHelper.ID));
-                    MainActivity.db.delete(DBHelper.TABLE_PLACES, DBHelper.ID + " = ?",
-                            new String[]{id});
-
-                    Utils.createNavigationDrawerAdapter(context);
+                    db.delete(DBHelper.TABLE_PLACES, DBHelper.ID + " = ?", new String[]{id});
+                    updateDrawer();
                 }
             }
         });
 
         return view;
+    }
+
+    private void updateDrawer() {
+        ListView listView = (ListView) ((MainActivity) context).findViewById(R.id.left_drawer);
+        if (db != null && db.isOpen()) {
+            String[] columns = new String[]{DBHelper.ID, DBHelper.PLACES_ID, DBHelper.PLACES_NAME};
+            Cursor cursor = db.query(DBHelper.TABLE_PLACES, columns, null, null, null, null, null);
+            listView.setAdapter(listView.getAdapter());
+            ((NavigationDrawerAdapter) listView.getAdapter()).changeCursor(cursor);
+        }
     }
 }

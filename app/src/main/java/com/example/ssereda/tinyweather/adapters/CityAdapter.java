@@ -8,18 +8,15 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.ssereda.tinyweather.R;
-import com.example.ssereda.tinyweather.utils.ViewHolder;
 import com.survivingwithandroid.weather.lib.model.City;
 
 import java.util.List;
 
 public class CityAdapter extends ArrayAdapter<City> {
-    private Context context;
     private List<City> cities;
 
     public CityAdapter(Context context, int resource, List<City> cities) {
         super(context, resource, cities);
-        this.context = context;
         this.cities = cities;
     }
 
@@ -33,20 +30,25 @@ public class CityAdapter extends ArrayAdapter<City> {
             view = inflater.inflate(R.layout.item_city_list, parent, false);
             holder = new ViewHolder();
 
-            holder.TVitemCityList = (TextView) view.findViewById(R.id.tv_item_city_list);
-            if (cities.get(position).getName() != null) {
-                holder.TVitemCityList.setText(cities.get(position).getName());
-            }
-
-            if (!(cities != null || cities.size() > 0)) {
-                holder.TVitemCityList.setText("city not exist");
-            }
+            holder.tvItemCityList= (TextView) view.findViewById(R.id.tv_item_city_list);
 
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
         }
 
+        if (cities.get(position).getName() != null) {
+            holder.tvItemCityList.setText(cities.get(position).getName());
+        }
+
+        if (!(cities != null || cities.size() > 0)) {
+            holder.tvItemCityList.setText(getContext().getResources().getString(R.string.add_city_not_exist));
+        }
+
         return view;
+    }
+
+    public class ViewHolder {
+        public TextView tvItemCityList;
     }
 }

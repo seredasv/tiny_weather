@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ssereda.tinyweather.R;
-import com.example.ssereda.tinyweather.utils.ViewHolder;
 import com.example.ssereda.tinyweather.utils.WeatherIconMapper;
 import com.survivingwithandroid.weather.lib.model.WeatherForecast;
 
@@ -20,12 +19,10 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class DayForecastAdapter extends ArrayAdapter<WeatherForecast> {
-    private Context context;
     private WeatherForecast weatherForecast;
 
     public DayForecastAdapter(Context context, int resource, WeatherForecast weatherForecast) {
         super(context, resource);
-        this.context = context;
         this.weatherForecast = weatherForecast;
     }
 
@@ -71,5 +68,10 @@ public class DayForecastAdapter extends ArrayAdapter<WeatherForecast> {
         }
 
         return view;
+    }
+
+    public class ViewHolder {
+        public TextView tvItemDayForecastTimestamp, tvItemDayForecastTemperature, tvItemDayForecastWind;
+        public ImageView ivItemDayForecastIcon;
     }
 }

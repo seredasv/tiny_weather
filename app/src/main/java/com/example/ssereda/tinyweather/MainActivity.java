@@ -1,5 +1,6 @@
 package com.example.ssereda.tinyweather;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.ViewDragHelper;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -29,53 +31,54 @@ import com.example.ssereda.tinyweather.fragments.DayWeatherFragment;
 import com.example.ssereda.tinyweather.fragments.HourWeatherFragment;
 import com.example.ssereda.tinyweather.fragments.WeatherFragment;
 import com.example.ssereda.tinyweather.utils.DBHelper;
-import com.example.ssereda.tinyweather.utils.Utils;
-import com.survivingwithandroid.weather.lib.WeatherClient;
-import com.survivingwithandroid.weather.lib.WeatherConfig;
-import com.survivingwithandroid.weather.lib.client.okhttp.WeatherDefaultClient;
-import com.survivingwithandroid.weather.lib.provider.openweathermap.OpenweathermapProviderType;
+
+import java.lang.reflect.Field;
 
 public class MainActivity extends ActionBarActivity {
-    public static final String WEATHER_FRAGMENT = "weather_fragment";
-    public static final String ADD_CITY_FRAGMENT = "add_city_fragment";
-    public static final String HOUR_WEATHER_FORECAST_FRAGMENT = "hour_weather_forecast_fragment";
-    public static final String DAY_WEATHER_FORECAST_FRAGMENT = "day_weather_forecast_fragment";
-    public static NavigationDrawerAdapter adapter;
-    public static DrawerLayout drawerLayout;
-    public static ListView drawerListView;
-    public static Toolbar toolbar;
-    public static DBHelper dbHelper;
-    public static SQLiteDatabase db;
-    private static long back_pressed;
     int backStack = 1;
+    private long back_pressed;
+    private String ADD_CITY_FRAGMENT = "add_city_fragment";
+    private String HOUR_WEATHER_FORECAST_FRAGMENT = "hour_weather_forecast_fragment";
+    private String DAY_WEATHER_FORECAST_FRAGMENT = "day_weather_forecast_fragment";
+    private NavigationDrawerAdapter adapter;
+    private DrawerLayout drawerLayout;
+    private ListView drawerListView;
+    private Toolbar toolbar;
+    private SQLiteDatabase db;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private FrameLayout frameLayout;
     private float lastTranslate = 0.0f;
-    public static WeatherClient weatherClient;
-    public static SharedPreferences sharedPreferences;
-//    private CustomPagerAdapter customPagerAdapter;
-//    private ViewPager viewPager;
+    private SharedPreferences sharedPreferences;
+    private Cursor cursorAdapter, cursorWeather;
 
     //TODO change icons size (cancel, update view, etc..)
 
+    public void createNavigationDrawerAdapter(Context context) {
+        if (db != null && db.isOpen()) {
+            String[] columns = new String[]{DBHelper.ID, DBHelper.PLACES_ID, DBHelper.PLACES_NAME};
+            cursorAdapter = db.query(DBHelper.TABLE_PLACES, columns, null, null, null, null, null);
+        }
+
+        String[] from = new String[]{
+                DBHelper.PLACES_NAME
+        };
+        int[] to = new int[]{
+                R.id.label
+        };
+
+        if (adapter != null) {
+            adapter = null;
+        }
+        if (cursorAdapter != null) {
+            adapter = new NavigationDrawerAdapter(context, R.layout.drawer_list_item, cursorAdapter,
+                    from, to, 0, sharedPreferences);
+            drawerListView.setAdapter(adapter);
+            adapter.changeCursor(cursorAdapter);
+        }
+    }
+
     @Override
     public void onBackPressed() {
-//        if (drawerLayout.isDrawerOpen(Gravity.START)) {
-//            drawerLayout.closeDrawer(Gravity.START);
-//        } else {
-//            if (viewPager.getCurrentItem() == 0) {
-//                if (back_pressed + 2000 > System.currentTimeMillis()) {
-//                    super.onBackPressed();
-//                } else {
-//                    Toast.makeText(getBaseContext(), getResources().getString(R.string.toast_exit),
-//                            Toast.LENGTH_SHORT).show();
-//                }
-//                back_pressed = System.currentTimeMillis();
-//            } else {
-//                viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
-//            }
-//        }
-
         int count = getSupportFragmentManager().getBackStackEntryCount();
 
         if (drawerLayout.isDrawerOpen(Gravity.START)) {
@@ -103,40 +106,9 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-
-//        customPagerAdapter = new CustomPagerAdapter(getSupportFragmentManager());
-//        viewPager = (ViewPager) findViewById(R.id.container);
-//        viewPager.setAdapter(customPagerAdapter);
-
-        if (dbHelper == null) {
-            dbHelper = new DBHelper(this);
-        }
-        db = dbHelper.getWritableDatabase();
+        db = DBHelper.getInstance(this).getWritableDatabase();
 
         sharedPreferences = getSharedPreferences("last_place_id", MODE_PRIVATE);
-
-        //Weather config
-        WeatherConfig config = new WeatherConfig();
-        config.unitSystem = WeatherConfig.UNIT_SYSTEM.M;
-        config.lang = "en"; // If you want to use english
-        config.maxResult = 10; // Max number of cities retrieved
-        config.numDays = 10; // Max num of days in the forecast
-
-        try {
-
-//            Open weather map -> OpenweathermapProviderType
-//            Yahoo! Weather -> YahooWeatherProviderType
-//            Weather underground -> WeatherundergroundProviderType
-//            Forecast.io -> ForecastIOProviderType
-
-            weatherClient = (new WeatherClient.ClientBuilder()).attach(this)
-                    .httpClient(WeatherDefaultClient.class)
-                    .provider(new OpenweathermapProviderType())
-                    .config(config)
-                    .build();
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
 
         toolbar = (Toolbar) findViewById(R.id.material_toolbar);
         if (toolbar != null) {
@@ -212,8 +184,6 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        Utils.createNavigationDrawerAdapter(this);
-
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
                 R.string.app_name, R.string.app_name) {
             public void onDrawerClosed(View view) {
@@ -251,52 +221,55 @@ public class MainActivity extends ActionBarActivity {
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
 
-        // change touch area to open drawer:
-//        Field mDragger = null;
-//        try {
-//            mDragger = drawerLayout.getClass().getDeclaredField("mLeftDragger");
-//        } catch (NoSuchFieldException e) {
-//            e.printStackTrace();
-//        }
-//        if (mDragger != null) {
-//            mDragger.setAccessible(true);
-//        }
-//        ViewDragHelper draggerObj = null;
-//        try {
-//            if (mDragger != null) {
-//                draggerObj = (ViewDragHelper) mDragger.get(drawerLayout);
-//            }
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        }
-//
-//        Field mEdgeSize = null;
-//        try {
-//            if (draggerObj != null) {
-//                mEdgeSize = draggerObj.getClass().getDeclaredField("mEdgeSize");
-//            }
-//        } catch (NoSuchFieldException e) {
-//            e.printStackTrace();
-//        }
-//        if (mEdgeSize != null) {
-//            mEdgeSize.setAccessible(true);
-//        }
-//        int edge = 0;
-//        try {
-//            if (mEdgeSize != null) {
-//                edge = mEdgeSize.getInt(draggerObj);
-//            }
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        }
-//
-//        try {
-//            if (mEdgeSize != null) {
-//                mEdgeSize.setInt(draggerObj, edge * 5);
-//            }
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        }
+        changeOpenDrawerTouchArea();
+    }
+
+    public void changeOpenDrawerTouchArea() {
+        Field mDragger = null;
+        try {
+            mDragger = drawerLayout.getClass().getDeclaredField("mLeftDragger");
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        if (mDragger != null) {
+            mDragger.setAccessible(true);
+        }
+        ViewDragHelper draggerObj = null;
+        try {
+            if (mDragger != null) {
+                draggerObj = (ViewDragHelper) mDragger.get(drawerLayout);
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        Field mEdgeSize = null;
+        try {
+            if (draggerObj != null) {
+                mEdgeSize = draggerObj.getClass().getDeclaredField("mEdgeSize");
+            }
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        if (mEdgeSize != null) {
+            mEdgeSize.setAccessible(true);
+        }
+        int edge = 0;
+        try {
+            if (mEdgeSize != null) {
+                edge = mEdgeSize.getInt(draggerObj);
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (mEdgeSize != null) {
+                mEdgeSize.setInt(draggerObj, edge * 5);
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -332,34 +305,35 @@ public class MainActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
 
+        createNavigationDrawerAdapter(this);
+
         String lastPlaceID = sharedPreferences.getString(DBHelper.ID, "");
         if (lastPlaceID != null && lastPlaceID.length() > 0) {
-            String[] columns = new String[]{DBHelper.ID , DBHelper.PLACES_COUNTRY,
-                    DBHelper.PLACES_REGION, DBHelper.PLACES_ID, DBHelper.PLACES_NAME };
+            String[] columns = new String[]{DBHelper.ID, DBHelper.PLACES_ID, DBHelper.PLACES_NAME};
             if (db != null && db.isOpen()) {
-                Cursor cursor = db.query(DBHelper.TABLE_PLACES, columns, DBHelper.ID + " = ? ",
+                cursorWeather = db.query(DBHelper.TABLE_PLACES, columns, DBHelper.ID + " = ? ",
                         new String[]{lastPlaceID}, null, null, null);
-                if (cursor != null) {
-                    if (cursor.moveToFirst()) {
+                if (cursorWeather != null) {
+                    if (cursorWeather.moveToFirst()) {
                         Fragment fragment = new WeatherFragment();
+                        String placeID = cursorWeather.getString(cursorWeather.getColumnIndex(DBHelper.PLACES_ID));
+                        String placeName = cursorWeather.getString(cursorWeather.getColumnIndex(DBHelper.PLACES_NAME));
 
-                        toolbar.setTitle(cursor.getString(cursor.getColumnIndex(DBHelper.PLACES_NAME)));
+                        toolbar.setTitle(placeName);
 
                         Bundle bundle = new Bundle();
-                        bundle.putInt(DBHelper.ID, cursor.getInt(cursor.getColumnIndex(DBHelper.ID)));
-                        bundle.putString(DBHelper.PLACES_ID, cursor.getString(cursor.getColumnIndex(DBHelper.PLACES_ID)));
-                        bundle.putString(DBHelper.PLACES_COUNTRY, cursor.getString(cursor.getColumnIndex(DBHelper.PLACES_COUNTRY)));
-                        bundle.putString(DBHelper.PLACES_REGION, cursor.getString(cursor.getColumnIndex(DBHelper.PLACES_REGION)));
-                        bundle.putString(DBHelper.PLACES_NAME, cursor.getString(cursor.getColumnIndex(DBHelper.PLACES_NAME)));
+                        bundle.putString(DBHelper.PLACES_ID, placeID);
+                        bundle.putString(DBHelper.PLACES_NAME, placeName);
                         fragment.setArguments(bundle);
 
                         if (sharedPreferences != null) {
                             SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString(DBHelper.ID, cursor.getString(cursor.getColumnIndex(DBHelper.ID)));
+                            editor.putString(DBHelper.ID, cursorWeather.getString(cursorWeather.getColumnIndex(DBHelper.ID)));
                             editor.apply();
                         }
 
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        String WEATHER_FRAGMENT = "weather_fragment";
                         transaction.addToBackStack(WEATHER_FRAGMENT);
                         if (fragment.isAdded()) {
                             transaction.show(fragment);
@@ -370,9 +344,6 @@ public class MainActivity extends ActionBarActivity {
                         }
                     }
                 }
-                if (cursor != null) {
-                    cursor.close();
-                }
             }
         }
     }
@@ -380,5 +351,12 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        if (cursorAdapter != null) {
+            cursorAdapter.close();
+        }
+        if (cursorWeather != null) {
+            cursorWeather.close();
+        }
     }
 }

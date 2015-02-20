@@ -13,6 +13,7 @@
     <!--add a new city-->
     <string name="add_city">Add a new city</string>
     <string name="add_city_header">Please add a new city:</string>
+    <string name="add_city_not_exist">City does not exist.</string>
 
     <!--EditText-->
     <string name="edit_text_enter_city_name">enter city name</string>
