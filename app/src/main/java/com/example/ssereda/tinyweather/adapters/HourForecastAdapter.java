@@ -9,21 +9,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ssereda.tinyweather.R;
+import com.example.ssereda.tinyweather.utils.DateUtils;
 import com.example.ssereda.tinyweather.utils.WeatherIconMapper;
 import com.survivingwithandroid.weather.lib.model.WeatherHourForecast;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Locale;
 
 public class HourForecastAdapter extends ArrayAdapter<WeatherHourForecast> {
     private WeatherHourForecast weatherHourForecast;
+    private DateUtils dateUtils;
 
     public HourForecastAdapter(Context context, int resource, WeatherHourForecast weatherHourForecast) {
         super(context, resource);
         this.weatherHourForecast = weatherHourForecast;
+
+        dateUtils = new DateUtils(new Date(), new GregorianCalendar());
     }
 
     @Override
@@ -51,14 +52,8 @@ public class HourForecastAdapter extends ArrayAdapter<WeatherHourForecast> {
             holder = (ViewHolder) view.getTag();
         }
 
-        Date date = new Date();
-        Calendar gregorianCalendar = new GregorianCalendar();
-        gregorianCalendar.setTime(date);
-        gregorianCalendar.add(GregorianCalendar.HOUR, position + 1);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM HH", Locale.ENGLISH);
-
         if (weatherHourForecast != null) {
-            holder.tvItemHourForecastTimestamp.setText(sdf.format(gregorianCalendar.getTime()) + ":00");
+            dateUtils.sdfHour(position, holder.tvItemHourForecastTimestamp);
             holder.tvItemHourForecastTemperature.setText(String.valueOf((int) weatherHourForecast.getHourForecast().get(position).weather.temperature.getTemp())
                     + " " + weatherHourForecast.getUnit().tempUnit);
             holder.tvItemHourForecastWind.setText(String.valueOf((int) weatherHourForecast.getHourForecast().get(position).weather.wind.getSpeed())

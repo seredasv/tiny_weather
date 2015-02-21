@@ -15,27 +15,25 @@ import android.widget.TextView;
 
 import com.example.ssereda.tinyweather.R;
 import com.example.ssereda.tinyweather.utils.DBHelper;
+import com.example.ssereda.tinyweather.utils.DateUtils;
 import com.example.ssereda.tinyweather.utils.Weather;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Locale;
 
 public class WeatherFragment extends Fragment {
     private String placesID, placesName;
     private TextView tvWind, tvHumidity, tvCurrentTemperature, tvTemperature_1, tvTemperature_2,
             tvTemperature_3;
     private ImageView imageViewCurrentWeatherIcon;
-    private Calendar gregorianCalendar;
-    private SimpleDateFormat sdfTime;
-    private Date date;
     private Weather weather;
+    private DateUtils dateUtils;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        dateUtils = new DateUtils(new Date(), new GregorianCalendar());
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -77,13 +75,6 @@ public class WeatherFragment extends Fragment {
         ImageView imageViewUpdateWeather = (ImageView) view.findViewById(R.id.image_view_update_weather);
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.material_toolbar);
 
-        date = new Date();
-        gregorianCalendar = new GregorianCalendar();
-        gregorianCalendar.setTime(date);
-        SimpleDateFormat sdfWeekDay = new SimpleDateFormat("EEEE", Locale.ENGLISH);
-        SimpleDateFormat sdfWeekDayAndTime = new SimpleDateFormat("EEEE HH:mm", Locale.ENGLISH);
-        sdfTime = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
-
         imageViewUpdateWeather.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,17 +100,10 @@ public class WeatherFragment extends Fragment {
             weather.getForecastWeather(placesID, 3, tvTemperature_3);
         }
 
-        tvCurrentDayData.setText(sdfWeekDayAndTime.format(gregorianCalendar.getTime()));
-        tvWeatherUpdateTime.setText("last update: " + sdfTime.format(gregorianCalendar.getTime()));
-
-        gregorianCalendar.add(GregorianCalendar.DAY_OF_WEEK, 1);
-        tvDayData_1.setText(sdfWeekDay.format(gregorianCalendar.getTime()));
-
-        gregorianCalendar.add(GregorianCalendar.DAY_OF_WEEK, 1);
-        tvDayData_2.setText(sdfWeekDay.format(gregorianCalendar.getTime()));
-
-        gregorianCalendar.add(GregorianCalendar.DAY_OF_WEEK, 1);
-        tvDayData_3.setText(sdfWeekDay.format(gregorianCalendar.getTime()));
+        dateUtils.sdfWeekDayAndTime(tvCurrentDayData, tvWeatherUpdateTime);
+        dateUtils.sdfWeekDay(tvDayData_1, 1);
+        dateUtils.sdfWeekDay(tvDayData_2, 2);
+        dateUtils.sdfWeekDay(tvDayData_3, 3);
 
         if (placesName != null && placesName.length() > 0) {
             tvPlaceName.setText(placesName);
@@ -129,23 +113,13 @@ public class WeatherFragment extends Fragment {
     }
 
     private void setUpdatedText(int id) {
-        if (date != null) {
-            date = null;
-        }
-        date = new Date();
-        if (gregorianCalendar != null) {
-            gregorianCalendar = null;
-        }
-        gregorianCalendar = new GregorianCalendar();
-        gregorianCalendar.setTime(date);
-        if (sdfTime != null) {
-            sdfTime = null;
-        }
-        sdfTime = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
-
         if (getView() != null) {
             TextView textView = (TextView) getView().findViewById(id);
-            textView.setText("last update: " + sdfTime.format(gregorianCalendar.getTime()));
+            if (dateUtils != null) {
+                dateUtils = null;
+            }
+            dateUtils = new DateUtils(new Date(), new GregorianCalendar());
+            dateUtils.sdfTime(textView);
         }
     }
 }

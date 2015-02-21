@@ -9,21 +9,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ssereda.tinyweather.R;
+import com.example.ssereda.tinyweather.utils.DateUtils;
 import com.example.ssereda.tinyweather.utils.WeatherIconMapper;
 import com.survivingwithandroid.weather.lib.model.WeatherForecast;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Locale;
 
 public class DayForecastAdapter extends ArrayAdapter<WeatherForecast> {
     private WeatherForecast weatherForecast;
+    private DateUtils dateUtils;
 
     public DayForecastAdapter(Context context, int resource, WeatherForecast weatherForecast) {
         super(context, resource);
         this.weatherForecast = weatherForecast;
+
+        dateUtils = new DateUtils(new Date(), new GregorianCalendar());
     }
 
     @Override
@@ -51,20 +52,13 @@ public class DayForecastAdapter extends ArrayAdapter<WeatherForecast> {
             holder = (ViewHolder) view.getTag();
         }
 
-        Date date = new Date();
-        Calendar gregorianCalendar = new GregorianCalendar();
-        gregorianCalendar.setTime(date);
-        gregorianCalendar.add(GregorianCalendar.DAY_OF_WEEK, position + 1);
-        SimpleDateFormat sdfDay = new SimpleDateFormat("EEEE", Locale.ENGLISH);
-
         if (weatherForecast != null) {
-            holder.tvItemDayForecastTimestamp.setText(sdfDay.format(gregorianCalendar.getTime()));
+            dateUtils.sdfDay(position, holder.tvItemDayForecastTimestamp);
             holder.tvItemDayForecastTemperature.setText(String.valueOf((int) weatherForecast.getForecast().get(position).forecastTemp.day)
                     + " " + weatherForecast.getUnit().tempUnit);
             holder.tvItemDayForecastWind.setText(String.valueOf((int) weatherForecast.getForecast().get(position).weather.wind.getSpeed())
                     + " " + weatherForecast.getUnit().speedUnit);
             holder.ivItemDayForecastIcon.setImageResource(WeatherIconMapper.getWeatherResource(weatherForecast.getForecast().get(position).weather.currentCondition.getIcon(), weatherForecast.getForecast().get(position).weather.currentCondition.getWeatherId()));
-
         }
 
         return view;
