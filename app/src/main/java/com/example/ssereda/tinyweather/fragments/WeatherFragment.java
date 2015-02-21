@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,19 +16,11 @@ import android.widget.TextView;
 import com.example.ssereda.tinyweather.R;
 import com.example.ssereda.tinyweather.utils.DBHelper;
 import com.example.ssereda.tinyweather.utils.Weather;
-import com.example.ssereda.tinyweather.utils.WeatherIconMapper;
-import com.survivingwithandroid.weather.lib.WeatherClient;
-import com.survivingwithandroid.weather.lib.exception.WeatherLibException;
-import com.survivingwithandroid.weather.lib.model.CurrentWeather;
-import com.survivingwithandroid.weather.lib.model.DayForecast;
-import com.survivingwithandroid.weather.lib.model.WeatherForecast;
-import com.survivingwithandroid.weather.lib.request.WeatherRequest;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Locale;
 
 public class WeatherFragment extends Fragment {
@@ -40,7 +31,7 @@ public class WeatherFragment extends Fragment {
     private Calendar gregorianCalendar;
     private SimpleDateFormat sdfTime;
     private Date date;
-    private WeatherClient weatherClient;
+    private Weather weather;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,7 +43,7 @@ public class WeatherFragment extends Fragment {
             placesName = bundle.getString(DBHelper.PLACES_NAME);
         }
 
-        weatherClient = Weather.getInstance().weatherClient(getActivity());
+        weather = Weather.getInstance(getActivity());
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("last_place_id", Context.MODE_PRIVATE);
 
         if (sharedPreferences != null) {
@@ -97,8 +88,11 @@ public class WeatherFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (placesID != null && placesID.length() > 0) {
-                    getCurrentCondition(placesID);
-                    getForecastWeather(placesID);
+                    weather.getCurrentCondition(placesID, tvWind, tvCurrentTemperature,
+                            tvHumidity, imageViewCurrentWeatherIcon);
+                    weather.getForecastWeather(placesID, 1, tvTemperature_1);
+                    weather.getForecastWeather(placesID, 2, tvTemperature_2);
+                    weather.getForecastWeather(placesID, 3, tvTemperature_3);
                 }
 
                 setUpdatedText(R.id.text_view_weather_update_time);
@@ -108,8 +102,11 @@ public class WeatherFragment extends Fragment {
         toolbar.setTitle(placesName);
 
         if (placesID != null && placesID.length() > 0) {
-            getCurrentCondition(placesID);
-            getForecastWeather(placesID);
+            weather.getCurrentCondition(placesID, tvWind, tvCurrentTemperature,
+                    tvHumidity, imageViewCurrentWeatherIcon);
+            weather.getForecastWeather(placesID, 1, tvTemperature_1);
+            weather.getForecastWeather(placesID, 2, tvTemperature_2);
+            weather.getForecastWeather(placesID, 3, tvTemperature_3);
         }
 
         tvCurrentDayData.setText(sdfWeekDayAndTime.format(gregorianCalendar.getTime()));
@@ -129,61 +126,6 @@ public class WeatherFragment extends Fragment {
         }
 
         return view;
-    }
-
-    private void getCurrentCondition(String cityID) {
-        if (weatherClient != null) {
-            weatherClient.getCurrentCondition(new WeatherRequest(cityID), new WeatherClient.WeatherEventListener() {
-                @Override
-                public void onWeatherRetrieved(CurrentWeather currentWeather) {
-                    tvWind.setText(String.valueOf((int) currentWeather.weather.wind.getSpeed())
-                            + " " + currentWeather.getUnit().speedUnit);
-                    tvCurrentTemperature.setText(String.valueOf((int) currentWeather.weather.temperature.getTemp())
-                            + " " + currentWeather.getUnit().tempUnit);
-                    tvHumidity.setText(String.valueOf((int) currentWeather.weather.currentCondition.getHumidity())
-                            + " %");
-                    imageViewCurrentWeatherIcon.setImageResource(WeatherIconMapper
-                            .getWeatherResource(currentWeather.weather.currentCondition.getIcon(),
-                                    currentWeather.weather.currentCondition.getWeatherId()));
-
-//                setToolbarColor(currentWeather.weather.temperature.getTemp());
-                }
-
-                @Override
-                public void onWeatherError(WeatherLibException weatherLibException) {
-                    Log.e("mylog", "weather lib exception");
-                }
-
-                @Override
-                public void onConnectionError(Throwable t) {
-                    Log.e("mylog", "connection error");
-                }
-            });
-        }
-    }
-
-    private void getForecastWeather(String cityID) {
-        if (weatherClient != null) {
-            weatherClient.getForecastWeather(cityID, new WeatherClient.ForecastWeatherEventListener() {
-                @Override
-                public void onWeatherRetrieved(WeatherForecast weatherForecast) {
-                    List<DayForecast> forecast = weatherForecast.getForecast();
-                    tvTemperature_1.setText((int) forecast.get(1).forecastTemp.day + " " + weatherForecast.getUnit().tempUnit);
-                    tvTemperature_2.setText((int) forecast.get(2).forecastTemp.day + " " + weatherForecast.getUnit().tempUnit);
-                    tvTemperature_3.setText((int) forecast.get(3).forecastTemp.day + " " + weatherForecast.getUnit().tempUnit);
-                }
-
-                @Override
-                public void onWeatherError(WeatherLibException t) {
-                    Log.e("mylog", "weather error");
-                }
-
-                @Override
-                public void onConnectionError(Throwable t) {
-                    Log.e("mylog", "connection error");
-                }
-            });
-        }
     }
 
     private void setUpdatedText(int id) {

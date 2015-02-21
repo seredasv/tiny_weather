@@ -51,8 +51,6 @@ public class MainActivity extends ActionBarActivity {
     private SharedPreferences sharedPreferences;
     private Cursor cursorAdapter, cursorWeather;
 
-    //TODO change icons size (cancel, update view, etc..)
-
     public void createNavigationDrawerAdapter(Context context) {
         if (db != null && db.isOpen()) {
             String[] columns = new String[]{DBHelper.ID, DBHelper.PLACES_ID, DBHelper.PLACES_NAME};

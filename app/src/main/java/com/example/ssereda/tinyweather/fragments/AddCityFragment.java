@@ -46,7 +46,7 @@ public class AddCityFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        weatherClient = Weather.getInstance().weatherClient(getActivity());
+        weatherClient = Weather.getInstance(getActivity()).weatherClient(getActivity());
         db = DBHelper.getInstance(getActivity()).getWritableDatabase();
     }
 
