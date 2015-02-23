@@ -12,16 +12,16 @@ import android.widget.ListView;
 
 import com.example.ssereda.tinyweather.R;
 import com.example.ssereda.tinyweather.utils.DBHelper;
-import com.example.ssereda.tinyweather.utils.Weather;
+import com.example.ssereda.tinyweather.utils.WeatherUtils;
 
 public class HourWeatherFragment extends Fragment {
-    private Weather weather;
+    private WeatherUtils weatherUtils;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        weather = Weather.getInstance(getActivity());
+        weatherUtils = WeatherUtils.getInstance(getActivity());
     }
 
     @Override
@@ -33,7 +33,7 @@ public class HourWeatherFragment extends Fragment {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("last_place_id", Context.MODE_PRIVATE);
         String placeID = sharedPreferences.getString(DBHelper.PLACES_ID, "");
         if (placeID != null && placeID.length() > 0) {
-            weather.getHourForecastWeather(getActivity(), placeID, lvHourForecast, R.layout.item_hour_forecast);
+            weatherUtils.getHourForecastWeather(getActivity(), placeID, lvHourForecast, R.layout.item_hour_forecast);
         }
 
         return view;

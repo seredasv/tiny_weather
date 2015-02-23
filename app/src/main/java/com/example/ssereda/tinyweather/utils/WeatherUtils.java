@@ -30,18 +30,18 @@ import java.util.List;
 //            Weather underground -> WeatherundergroundProviderType
 //            Forecast.io -> ForecastIOProviderType
 
-public class Weather {
-    private static Weather instance;
+public class WeatherUtils {
+    private static WeatherUtils instance;
     private WeatherClient weatherClient;
     private Context context;
 
-    private Weather(Context context) {
+    private WeatherUtils(Context context) {
         this.context = context;
     }
 
-    public static synchronized Weather getInstance(Context context) {
+    public static synchronized WeatherUtils getInstance(Context context) {
         if (instance == null) {
-            instance = new Weather(context);
+            instance = new WeatherUtils(context);
         }
         instance.weatherClient(context);
         return instance;

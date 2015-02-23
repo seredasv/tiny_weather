@@ -22,7 +22,7 @@ import android.widget.Toast;
 import com.example.ssereda.tinyweather.R;
 import com.example.ssereda.tinyweather.adapters.NavigationDrawerAdapter;
 import com.example.ssereda.tinyweather.utils.DBHelper;
-import com.example.ssereda.tinyweather.utils.Weather;
+import com.example.ssereda.tinyweather.utils.WeatherUtils;
 import com.survivingwithandroid.weather.lib.model.City;
 
 public class AddCityFragment extends Fragment {
@@ -31,14 +31,14 @@ public class AddCityFragment extends Fragment {
     private ImageView ivTrackingOnOff;
     private boolean isTracking = true;
     private Criteria criteria;
-    private Weather weather;
+    private WeatherUtils weatherUtils;
     private SQLiteDatabase db;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        weather = Weather.getInstance(getActivity());
+        weatherUtils = WeatherUtils.getInstance(getActivity());
         db = DBHelper.getInstance(getActivity()).getWritableDatabase();
     }
 
@@ -91,7 +91,7 @@ public class AddCityFragment extends Fragment {
                 criteria.setCostAllowed(false);
             }
 
-            weather.searchCityByLocation(getActivity(), lvCityList, criteria, R.layout.item_city_list);
+            weatherUtils.searchCityByLocation(getActivity(), lvCityList, criteria, R.layout.item_city_list);
         }
 
         linLayTrackingOnOff.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +102,7 @@ public class AddCityFragment extends Fragment {
 
                     isTracking = false;
 
-                    weather.searchCityByLocation(getActivity(), lvCityList, null, R.layout.item_city_list);
+                    weatherUtils.searchCityByLocation(getActivity(), lvCityList, null, R.layout.item_city_list);
                 } else {
                     ivTrackingOnOff.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.image_view_pin_on));
 
@@ -116,7 +116,7 @@ public class AddCityFragment extends Fragment {
                         criteria.setCostAllowed(false);
                     }
 
-                    weather.searchCityByLocation(getActivity(), lvCityList, criteria, R.layout.item_city_list);
+                    weatherUtils.searchCityByLocation(getActivity(), lvCityList, criteria, R.layout.item_city_list);
                 }
             }
         });
@@ -129,7 +129,7 @@ public class AddCityFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
                 if (count > 3) {
-                    weather.searchCity(charSequence, getActivity(), lvCityList, R.layout.item_city_list);
+                    weatherUtils.searchCity(charSequence, getActivity(), lvCityList, R.layout.item_city_list);
                 }
             }
 

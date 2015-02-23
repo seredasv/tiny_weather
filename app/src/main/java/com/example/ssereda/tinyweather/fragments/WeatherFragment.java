@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.example.ssereda.tinyweather.R;
 import com.example.ssereda.tinyweather.utils.DBHelper;
 import com.example.ssereda.tinyweather.utils.DateUtils;
-import com.example.ssereda.tinyweather.utils.Weather;
+import com.example.ssereda.tinyweather.utils.WeatherUtils;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -26,7 +26,7 @@ public class WeatherFragment extends Fragment {
     private TextView tvWind, tvHumidity, tvCurrentTemperature, tvTemperature_1, tvTemperature_2,
             tvTemperature_3;
     private ImageView imageViewCurrentWeatherIcon;
-    private Weather weather;
+    private WeatherUtils weatherUtils;
     private DateUtils dateUtils;
 
     @Override
@@ -41,7 +41,7 @@ public class WeatherFragment extends Fragment {
             placesName = bundle.getString(DBHelper.PLACES_NAME);
         }
 
-        weather = Weather.getInstance(getActivity());
+        weatherUtils = WeatherUtils.getInstance(getActivity());
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("last_place_id", Context.MODE_PRIVATE);
 
         if (sharedPreferences != null) {
@@ -79,11 +79,11 @@ public class WeatherFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (placesID != null && placesID.length() > 0) {
-                    weather.getCurrentCondition(placesID, tvWind, tvCurrentTemperature,
+                    weatherUtils.getCurrentCondition(placesID, tvWind, tvCurrentTemperature,
                             tvHumidity, imageViewCurrentWeatherIcon);
-                    weather.getForecastWeather(placesID, 1, tvTemperature_1);
-                    weather.getForecastWeather(placesID, 2, tvTemperature_2);
-                    weather.getForecastWeather(placesID, 3, tvTemperature_3);
+                    weatherUtils.getForecastWeather(placesID, 1, tvTemperature_1);
+                    weatherUtils.getForecastWeather(placesID, 2, tvTemperature_2);
+                    weatherUtils.getForecastWeather(placesID, 3, tvTemperature_3);
                 }
 
                 setUpdatedText(R.id.text_view_weather_update_time);
@@ -93,11 +93,11 @@ public class WeatherFragment extends Fragment {
         toolbar.setTitle(placesName);
 
         if (placesID != null && placesID.length() > 0) {
-            weather.getCurrentCondition(placesID, tvWind, tvCurrentTemperature,
+            weatherUtils.getCurrentCondition(placesID, tvWind, tvCurrentTemperature,
                     tvHumidity, imageViewCurrentWeatherIcon);
-            weather.getForecastWeather(placesID, 1, tvTemperature_1);
-            weather.getForecastWeather(placesID, 2, tvTemperature_2);
-            weather.getForecastWeather(placesID, 3, tvTemperature_3);
+            weatherUtils.getForecastWeather(placesID, 1, tvTemperature_1);
+            weatherUtils.getForecastWeather(placesID, 2, tvTemperature_2);
+            weatherUtils.getForecastWeather(placesID, 3, tvTemperature_3);
         }
 
         dateUtils.sdfWeekDayAndTime(tvCurrentDayData, tvWeatherUpdateTime);

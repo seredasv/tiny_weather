@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.ViewDragHelper;
@@ -116,39 +117,49 @@ public class MainActivity extends ActionBarActivity {
                 public boolean onMenuItemClick(MenuItem menuItem) {
                     Fragment fragment;
                     FragmentTransaction transaction;
+                    FragmentManager fragmentManager = getSupportFragmentManager();
                     switch (menuItem.getItemId()) {
                         case R.id.action_add_city:
-                            fragment = new AddCityFragment();
-                            transaction = getSupportFragmentManager().beginTransaction();
-                            transaction.addToBackStack(ADD_CITY_FRAGMENT);
-                            if (fragment.isAdded()) {
-                                transaction.show(fragment);
+                            fragment = fragmentManager.findFragmentByTag(ADD_CITY_FRAGMENT);
+                            if (fragment != null) {
+                                transaction = fragmentManager.beginTransaction();
+                                transaction.addToBackStack(ADD_CITY_FRAGMENT);
+                                transaction.replace(R.id.container, fragment, ADD_CITY_FRAGMENT);
                                 transaction.commit();
                             } else {
+                                fragment = new AddCityFragment();
+                                transaction = getSupportFragmentManager().beginTransaction();
+                                transaction.addToBackStack(ADD_CITY_FRAGMENT);
                                 transaction.replace(R.id.container, fragment, ADD_CITY_FRAGMENT);
                                 transaction.commit();
                             }
                             break;
                         case R.id.action_day_forecast:
-                            fragment = new DayWeatherFragment();
-                            transaction = getSupportFragmentManager().beginTransaction();
-                            transaction.addToBackStack(DAY_WEATHER_FORECAST_FRAGMENT);
-                            if (fragment.isAdded()) {
-                                transaction.show(fragment);
+                            fragment = fragmentManager.findFragmentByTag(DAY_WEATHER_FORECAST_FRAGMENT);
+                            if (fragment != null) {
+                                transaction = fragmentManager.beginTransaction();
+                                transaction.addToBackStack(DAY_WEATHER_FORECAST_FRAGMENT);
+                                transaction.replace(R.id.container, fragment, DAY_WEATHER_FORECAST_FRAGMENT);
                                 transaction.commit();
                             } else {
+                                fragment = new DayWeatherFragment();
+                                transaction = getSupportFragmentManager().beginTransaction();
+                                transaction.addToBackStack(DAY_WEATHER_FORECAST_FRAGMENT);
                                 transaction.replace(R.id.container, fragment, DAY_WEATHER_FORECAST_FRAGMENT);
                                 transaction.commit();
                             }
                             break;
                         case R.id.action_hour_forecast:
-                            fragment = new HourWeatherFragment();
-                            transaction = getSupportFragmentManager().beginTransaction();
-                            transaction.addToBackStack(HOUR_WEATHER_FORECAST_FRAGMENT);
-                            if (fragment.isAdded()) {
-                                transaction.show(fragment);
+                            fragment = fragmentManager.findFragmentByTag(HOUR_WEATHER_FORECAST_FRAGMENT);
+                            if (fragment != null) {
+                                transaction = fragmentManager.beginTransaction();
+                                transaction.addToBackStack(HOUR_WEATHER_FORECAST_FRAGMENT);
+                                transaction.replace(R.id.container, fragment, HOUR_WEATHER_FORECAST_FRAGMENT);
                                 transaction.commit();
                             } else {
+                                fragment = new HourWeatherFragment();
+                                transaction = getSupportFragmentManager().beginTransaction();
+                                transaction.addToBackStack(HOUR_WEATHER_FORECAST_FRAGMENT);
                                 transaction.replace(R.id.container, fragment, HOUR_WEATHER_FORECAST_FRAGMENT);
                                 transaction.commit();
                             }
