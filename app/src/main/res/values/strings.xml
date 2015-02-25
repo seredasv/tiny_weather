@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Tiny Weather</string>
-    <string name="hello_world">Hello world!</string>
 
     <!--menu-->
     <string name="action_settings">Settings</string>
@@ -21,4 +20,7 @@
     <!--toast-->
     <string name="toast_exit">To exit please touch one more time</string>
     <string name="toast_add_city">City was add to your list</string>
+
+    <string name="banner_ad_unit_id">ca-app-pub-2098698486770097/6917459361</string>
+
 </resources>

@@ -23,6 +23,8 @@ import com.example.ssereda.tinyweather.R;
 import com.example.ssereda.tinyweather.adapters.NavigationDrawerAdapter;
 import com.example.ssereda.tinyweather.utils.DBHelper;
 import com.example.ssereda.tinyweather.utils.WeatherUtils;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.survivingwithandroid.weather.lib.model.City;
 
 public class AddCityFragment extends Fragment {
@@ -54,6 +56,11 @@ public class AddCityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_city_add, null);
+
+        // add adMob to layout
+        AdView mAdView = (AdView) view.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         etEnterCity = (EditText) view.findViewById(R.id.et_enter_city);
         lvCityList = (ListView) view.findViewById(R.id.lv_city_list);

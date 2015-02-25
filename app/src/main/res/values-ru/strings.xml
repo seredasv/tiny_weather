@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tiny Weather</string>
+    <string name="action_add_city">Добавить город</string>
+    <string name="action_day_forecast_fragment">Дневной прогноз</string>
+    <string name="action_hour_forecast_fragment">Часовой прогноз</string>
+    <string name="action_settings">Настройки</string>
+    <string name="action_weather_fragment">Погода</string>
+    <string name="add_city">Добавить новый город</string>
+    <string name="add_city_header">Пожалуйста добавьте новый город:</string>
+    <string name="add_city_not_exist">Город не существует.</string>
+    <string name="edit_text_enter_city_name">введите название города</string>
+    <string name="toast_add_city">Город был добавлен в ваш список</string>
+    <string name="toast_exit">Для выхода коснитесь еще раз</string>
+</resources>
