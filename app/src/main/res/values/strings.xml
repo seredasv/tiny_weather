@@ -19,6 +19,7 @@
 
     <!--weather update-->
     <string name="last_update">last update:</string>
+    <string name="wind_speed">m/s</string>
 
     <!--toast-->
     <string name="toast_exit">To exit please touch one more time</string>

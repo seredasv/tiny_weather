@@ -13,4 +13,5 @@
     <string name="toast_add_city">Город был добавлен в ваш список</string>
     <string name="toast_exit">Для выхода коснитесь еще раз</string>
     <string name="last_update">последнее обновление</string>
+    <string name="wind_speed">м/с</string>
 </resources>

@@ -86,7 +86,7 @@ public class WeatherFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (placesID != null && placesID.length() > 0) {
-                    weatherUtils.getCurrentCondition(placesID, tvWind, tvCurrentTemperature,
+                    weatherUtils.getCurrentCondition(getActivity(), placesID, tvWind, tvCurrentTemperature,
                             tvHumidity, imageViewCurrentWeatherIcon);
                     weatherUtils.getForecastWeather(placesID, 1, tvTemperature_1);
                     weatherUtils.getForecastWeather(placesID, 2, tvTemperature_2);
@@ -100,7 +100,7 @@ public class WeatherFragment extends Fragment {
         toolbar.setTitle(placesName);
 
         if (placesID != null && placesID.length() > 0) {
-            weatherUtils.getCurrentCondition(placesID, tvWind, tvCurrentTemperature,
+            weatherUtils.getCurrentCondition(getActivity(), placesID, tvWind, tvCurrentTemperature,
                     tvHumidity, imageViewCurrentWeatherIcon);
             weatherUtils.getForecastWeather(placesID, 1, tvTemperature_1);
             weatherUtils.getForecastWeather(placesID, 2, tvTemperature_2);

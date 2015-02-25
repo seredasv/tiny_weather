@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.ssereda.tinyweather.R;
 import com.example.ssereda.tinyweather.adapters.CityAdapter;
 import com.example.ssereda.tinyweather.adapters.DayForecastAdapter;
 import com.example.ssereda.tinyweather.adapters.HourForecastAdapter;
@@ -92,13 +93,13 @@ public class WeatherUtils {
         });
     }
 
-    public void getCurrentCondition(String cityID, final TextView tvWind, final TextView tvCurTemp,
+    public void getCurrentCondition(final Context context, String cityID, final TextView tvWind, final TextView tvCurTemp,
                                     final TextView tvHumidity, final ImageView ivIcon) {
         weatherClient.getCurrentCondition(new WeatherRequest(cityID), new WeatherClient.WeatherEventListener() {
             @Override
             public void onWeatherRetrieved(CurrentWeather currentWeather) {
                 tvWind.setText(String.valueOf((int) currentWeather.weather.wind.getSpeed())
-                        + " " + currentWeather.getUnit().speedUnit);
+                        + " " + context.getResources().getString(R.string.wind_speed));
                 tvCurTemp.setText(String.valueOf((int) currentWeather.weather.temperature.getTemp())
                         + " " + currentWeather.getUnit().tempUnit);
                 tvHumidity.setText(String.valueOf((int) currentWeather.weather.currentCondition.getHumidity())
