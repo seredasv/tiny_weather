@@ -107,7 +107,7 @@ public class WeatherFragment extends Fragment {
             weatherUtils.getForecastWeather(placesID, 3, tvTemperature_3);
         }
 
-        dateUtils.sdfWeekDayAndTime(tvCurrentDayData, tvWeatherUpdateTime);
+        dateUtils.sdfWeekDayAndTime(getActivity(), tvCurrentDayData, tvWeatherUpdateTime);
         dateUtils.sdfWeekDay(tvDayData_1, 1);
         dateUtils.sdfWeekDay(tvDayData_2, 2);
         dateUtils.sdfWeekDay(tvDayData_3, 3);
@@ -126,7 +126,7 @@ public class WeatherFragment extends Fragment {
                 dateUtils = null;
             }
             dateUtils = new DateUtils(new Date(), new GregorianCalendar());
-            dateUtils.sdfTime(textView);
+            dateUtils.sdfTime(getActivity(), textView);
         }
     }
 }

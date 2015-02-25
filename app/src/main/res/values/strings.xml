@@ -17,10 +17,13 @@
     <!--EditText-->
     <string name="edit_text_enter_city_name">enter city name</string>
 
+    <!--weather update-->
+    <string name="last_update">last update:</string>
+
     <!--toast-->
     <string name="toast_exit">To exit please touch one more time</string>
     <string name="toast_add_city">City was add to your list</string>
 
-    <string name="banner_ad_unit_id">ca-app-pub-2098698486770097/6917459361</string>
+    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-2098698486770097/6917459361</string>
 
 </resources>

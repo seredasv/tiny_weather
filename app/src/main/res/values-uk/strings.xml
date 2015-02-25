@@ -10,7 +10,7 @@
     <string name="add_city_header">Пожалуйста добавьте новый город:</string>
     <string name="add_city_not_exist">Город не существует.</string>
     <string name="edit_text_enter_city_name">введите название города</string>
+    <string name="last_update">последнее обновление</string>
     <string name="toast_add_city">Город был добавлен в ваш список</string>
     <string name="toast_exit">Для выхода коснитесь еще раз</string>
-    <string name="last_update">последнее обновление</string>
 </resources>
