@@ -1,4 +1,4 @@
-package com.example.ssereda.tinyweather;
+package com.ssereda.tinyweather;
 
 import android.app.Application;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.example.ssereda.tinyweather.adapters;
+package com.ssereda.tinyweather.adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,11 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-import com.example.ssereda.tinyweather.MainActivity;
-import com.example.ssereda.tinyweather.R;
-import com.example.ssereda.tinyweather.fragments.WeatherFragment;
-import com.example.ssereda.tinyweather.utils.DBHelper;
-
+import com.ssereda.tinyweather.MainActivity;
+import com.ssereda.tinyweather.R;
+import com.ssereda.tinyweather.fragments.WeatherFragment;
+import com.ssereda.tinyweather.utils.DBHelper;
 
 public class NavigationDrawerAdapter extends SimpleCursorAdapter {
     private static final String WEATHER_FRAGMENT = "weather_fragment";

@@ -1,4 +1,4 @@
-package com.example.ssereda.tinyweather;
+package com.ssereda.tinyweather;
 
 import android.content.Context;
 import android.content.Intent;
@@ -26,12 +26,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.ssereda.tinyweather.adapters.NavigationDrawerAdapter;
-import com.example.ssereda.tinyweather.fragments.AddCityFragment;
-import com.example.ssereda.tinyweather.fragments.DayWeatherFragment;
-import com.example.ssereda.tinyweather.fragments.HourWeatherFragment;
-import com.example.ssereda.tinyweather.fragments.WeatherFragment;
-import com.example.ssereda.tinyweather.utils.DBHelper;
+import com.ssereda.tinyweather.adapters.NavigationDrawerAdapter;
+import com.ssereda.tinyweather.fragments.AddCityFragment;
+import com.ssereda.tinyweather.fragments.DayWeatherFragment;
+import com.ssereda.tinyweather.fragments.HourWeatherFragment;
+import com.ssereda.tinyweather.fragments.WeatherFragment;
+import com.ssereda.tinyweather.utils.DBHelper;
 
 import java.lang.reflect.Field;
 

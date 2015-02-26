@@ -1,4 +1,4 @@
-package com.example.ssereda.tinyweather.utils;
+package com.ssereda.tinyweather.utils;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

@@ -1,6 +1,6 @@
-package com.example.ssereda.tinyweather.utils;
+package com.ssereda.tinyweather.utils;
 
-import com.example.ssereda.tinyweather.R;
+import com.ssereda.tinyweather.R;
 
 public class WeatherIconMapper {
     public static int getWeatherResource(String id, int wId) {

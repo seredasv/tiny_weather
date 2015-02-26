@@ -1,4 +1,4 @@
-package com.example.ssereda.tinyweather.fragments;
+package com.ssereda.tinyweather.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,9 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.example.ssereda.tinyweather.R;
-import com.example.ssereda.tinyweather.utils.DBHelper;
-import com.example.ssereda.tinyweather.utils.WeatherUtils;
+import com.ssereda.tinyweather.R;
+import com.ssereda.tinyweather.utils.DBHelper;
+import com.ssereda.tinyweather.utils.WeatherUtils;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 

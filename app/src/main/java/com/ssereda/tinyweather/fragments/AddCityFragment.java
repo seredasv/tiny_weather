@@ -1,4 +1,4 @@
-package com.example.ssereda.tinyweather.fragments;
+package com.ssereda.tinyweather.fragments;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -19,10 +19,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.ssereda.tinyweather.R;
-import com.example.ssereda.tinyweather.adapters.NavigationDrawerAdapter;
-import com.example.ssereda.tinyweather.utils.DBHelper;
-import com.example.ssereda.tinyweather.utils.WeatherUtils;
+import com.ssereda.tinyweather.R;
+import com.ssereda.tinyweather.adapters.NavigationDrawerAdapter;
+import com.ssereda.tinyweather.utils.DBHelper;
+import com.ssereda.tinyweather.utils.WeatherUtils;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.survivingwithandroid.weather.lib.model.City;

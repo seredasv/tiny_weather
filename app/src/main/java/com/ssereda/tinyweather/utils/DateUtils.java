@@ -1,9 +1,9 @@
-package com.example.ssereda.tinyweather.utils;
+package com.ssereda.tinyweather.utils;
 
 import android.content.Context;
 import android.widget.TextView;
 
-import com.example.ssereda.tinyweather.R;
+import com.ssereda.tinyweather.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -1,4 +1,4 @@
-package com.example.ssereda.tinyweather.utils;
+package com.ssereda.tinyweather.utils;
 
 import android.content.Context;
 import android.location.Criteria;
@@ -7,10 +7,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.ssereda.tinyweather.R;
-import com.example.ssereda.tinyweather.adapters.CityAdapter;
-import com.example.ssereda.tinyweather.adapters.DayForecastAdapter;
-import com.example.ssereda.tinyweather.adapters.HourForecastAdapter;
+import com.ssereda.tinyweather.R;
+import com.ssereda.tinyweather.adapters.CityAdapter;
+import com.ssereda.tinyweather.adapters.DayForecastAdapter;
+import com.ssereda.tinyweather.adapters.HourForecastAdapter;
 import com.survivingwithandroid.weather.lib.WeatherClient;
 import com.survivingwithandroid.weather.lib.WeatherConfig;
 import com.survivingwithandroid.weather.lib.client.okhttp.WeatherDefaultClient;

@@ -1,4 +1,4 @@
-package com.example.ssereda.tinyweather.adapters;
+package com.ssereda.tinyweather.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.example.ssereda.tinyweather.R;
+import com.ssereda.tinyweather.R;
 import com.survivingwithandroid.weather.lib.model.City;
 
 import java.util.List;
