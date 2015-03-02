@@ -19,11 +19,12 @@ import java.util.GregorianCalendar;
 public class HourForecastAdapter extends ArrayAdapter<WeatherHourForecast> {
     private WeatherHourForecast weatherHourForecast;
     private DateUtils dateUtils;
+    private Context context;
 
     public HourForecastAdapter(Context context, int resource, WeatherHourForecast weatherHourForecast) {
         super(context, resource);
         this.weatherHourForecast = weatherHourForecast;
-
+        this.context = context;
         dateUtils = new DateUtils(new Date(), new GregorianCalendar());
     }
 
@@ -57,7 +58,7 @@ public class HourForecastAdapter extends ArrayAdapter<WeatherHourForecast> {
             holder.tvItemHourForecastTemperature.setText(String.valueOf((int) weatherHourForecast.getHourForecast().get(position).weather.temperature.getTemp())
                     + " " + weatherHourForecast.getUnit().tempUnit);
             holder.tvItemHourForecastWind.setText(String.valueOf((int) weatherHourForecast.getHourForecast().get(position).weather.wind.getSpeed())
-                    + " " + weatherHourForecast.getUnit().speedUnit);
+                    + " " + context.getResources().getString(R.string.wind_speed));
             holder.ivItemHourForecastIcon.setImageResource(WeatherIconMapper.getWeatherResource(weatherHourForecast.getHourForecast().get(position).weather.currentCondition.getIcon(), weatherHourForecast.getHourForecast().get(position).weather.currentCondition.getWeatherId()));
 
         }

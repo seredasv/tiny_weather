@@ -354,6 +354,17 @@ public class MainActivity extends ActionBarActivity {
                     }
                 }
             }
+        } else {
+            Fragment fragment = new AddCityFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.addToBackStack(ADD_CITY_FRAGMENT);
+            if (fragment.isAdded()) {
+                transaction.show(fragment);
+                transaction.commit();
+            } else {
+                transaction.replace(R.id.container, fragment, ADD_CITY_FRAGMENT);
+                transaction.commit();
+            }
         }
     }
 
