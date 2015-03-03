@@ -26,6 +26,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.ssereda.tinyweather.adapters.NavigationDrawerAdapter;
 import com.ssereda.tinyweather.fragments.AddCityFragment;
 import com.ssereda.tinyweather.fragments.DayWeatherFragment;
@@ -106,6 +108,11 @@ public class MainActivity extends ActionBarActivity {
 
         setContentView(R.layout.activity_main);
         db = DBHelper.getInstance(this).getWritableDatabase();
+
+        // add adMob to layout
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         sharedPreferences = getSharedPreferences("last_place_id", MODE_PRIVATE);
 
