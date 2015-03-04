@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="TypographyDashes">>
     <string name="app_name">Tiny Weather</string>
 
     <!--menu-->
@@ -27,4 +28,6 @@
 
     <string name="banner_ad_unit_id" translatable="false">ca-app-pub-2098698486770097/6917459361</string>
 
+    <!--google analytics code-->
+    <string name="google_analytics_code">UA-60348175-1</string>
 </resources>

@@ -28,6 +28,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.ssereda.tinyweather.adapters.NavigationDrawerAdapter;
 import com.ssereda.tinyweather.fragments.AddCityFragment;
 import com.ssereda.tinyweather.fragments.DayWeatherFragment;
@@ -36,6 +39,7 @@ import com.ssereda.tinyweather.fragments.WeatherFragment;
 import com.ssereda.tinyweather.utils.DBHelper;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 
 public class MainActivity extends ActionBarActivity {
     int backStack = 1;
@@ -53,6 +57,8 @@ public class MainActivity extends ActionBarActivity {
     private float lastTranslate = 0.0f;
     private SharedPreferences sharedPreferences;
     private Cursor cursorAdapter, cursorWeather;
+    public static HashMap<TrackerName, Tracker> mTrackers = new HashMap<>();
+    private static Context context;
 
     public void createNavigationDrawerAdapter(Context context) {
         if (db != null && db.isOpen()) {
@@ -76,6 +82,19 @@ public class MainActivity extends ActionBarActivity {
             drawerListView.setAdapter(adapter);
             adapter.changeCursor(cursorAdapter);
         }
+    }
+
+    public static synchronized Tracker getTracker(TrackerName trackerId) {
+        if (!mTrackers.containsKey(trackerId)) {
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
+            String PROPERTY_ID = context.getResources().getString(R.string.google_analytics_code);
+            Tracker t = (trackerId == TrackerName.APP_TRACKER) ? analytics.newTracker(PROPERTY_ID)
+                    : (trackerId == TrackerName.GLOBAL_TRACKER) ? analytics.newTracker(R.xml.global_tracker)
+                    : analytics.newTracker(R.xml.global_tracker);
+            mTrackers.put(trackerId, t);
+
+        }
+        return mTrackers.get(trackerId);
     }
 
     @Override
@@ -106,6 +125,8 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        context = this;
+
         setContentView(R.layout.activity_main);
         db = DBHelper.getInstance(this).getWritableDatabase();
 
@@ -113,6 +134,10 @@ public class MainActivity extends ActionBarActivity {
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+
+        Tracker tracker = getTracker(TrackerName.APP_TRACKER);
+        tracker.setScreenName("Main activity");
+        tracker.send(new HitBuilders.AppViewBuilder().build());
 
         sharedPreferences = getSharedPreferences("last_place_id", MODE_PRIVATE);
 
@@ -385,5 +410,11 @@ public class MainActivity extends ActionBarActivity {
         if (cursorWeather != null) {
             cursorWeather.close();
         }
+    }
+
+    public enum TrackerName {
+        APP_TRACKER, // Tracker used only in this app.
+        GLOBAL_TRACKER, // Tracker used by all the apps from a company. eg: roll-up tracking.
+        ECOMMERCE_TRACKER, // Tracker used by all ecommerce transactions from a company.
     }
 }

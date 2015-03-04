@@ -19,6 +19,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.ssereda.tinyweather.MainActivity;
 import com.ssereda.tinyweather.R;
 import com.ssereda.tinyweather.adapters.NavigationDrawerAdapter;
 import com.ssereda.tinyweather.utils.DBHelper;
@@ -54,6 +57,10 @@ public class AddCityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_city_add, null);
+
+        Tracker tracker = MainActivity.getTracker(MainActivity.TrackerName.APP_TRACKER);
+        tracker.setScreenName("Add City Fragment");
+        tracker.send(new HitBuilders.AppViewBuilder().build());
 
         etEnterCity = (EditText) view.findViewById(R.id.et_enter_city);
         lvCityList = (ListView) view.findViewById(R.id.lv_city_list);

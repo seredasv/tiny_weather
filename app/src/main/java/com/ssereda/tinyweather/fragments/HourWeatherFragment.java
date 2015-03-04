@@ -10,6 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.ssereda.tinyweather.MainActivity;
 import com.ssereda.tinyweather.R;
 import com.ssereda.tinyweather.utils.DBHelper;
 import com.ssereda.tinyweather.utils.WeatherUtils;
@@ -27,6 +30,10 @@ public class HourWeatherFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_weather_hour, null);
+
+        Tracker tracker = MainActivity.getTracker(MainActivity.TrackerName.APP_TRACKER);
+        tracker.setScreenName("Hour Weather Fragment");
+        tracker.send(new HitBuilders.AppViewBuilder().build());
 
         ListView lvHourForecast = (ListView) view.findViewById(R.id.lv_hour_forecast);
 

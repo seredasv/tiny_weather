@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.ssereda.tinyweather.MainActivity;
 import com.ssereda.tinyweather.R;
 import com.ssereda.tinyweather.utils.DBHelper;
 import com.ssereda.tinyweather.utils.DateUtils;
@@ -55,6 +58,10 @@ public class WeatherFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_weather, null);
+
+        Tracker tracker = MainActivity.getTracker(MainActivity.TrackerName.APP_TRACKER);
+        tracker.setScreenName("Weather Fragment");
+        tracker.send(new HitBuilders.AppViewBuilder().build());
 
         Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Thin.ttf");
 
